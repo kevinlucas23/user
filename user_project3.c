@@ -58,7 +58,8 @@ void to_write(unsigned long k, int port)
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
 		while (i < k) {
-			memcpy(all_page[(int)i].mem_addr, user_o, sizeof(user_o));
+			printf("ni here");
+			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
 			kev.addr = (uint64_t)all_page[(int)i].mem_addr;
 			if (write(port, &kev, sizeof(kev)) <= 0) {
 				errExit("Error writing");
