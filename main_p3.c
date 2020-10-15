@@ -52,10 +52,13 @@ int main(int argc, char* argv[])
 			else if (!strncmp(user_i, "w", 1)) {
 				to_write(sfd, port);
 			}
+			else {
+				printf("Exiting\n");
+				return 0;
+			}
 		}
 
 	}
-	
-	printf("Exiting\n");
-	return 0;
+
+
 }
