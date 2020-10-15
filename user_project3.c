@@ -11,7 +11,8 @@ void delay(int secs)
 
 void to_read(unsigned long k)
 {
-	char user_i[20], *c;
+	char user_i[20];
+	char* c;
 	unsigned long num, i = 0;
 	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k);
 	if (!fgets(user_i, 20, stdin))
@@ -19,10 +20,6 @@ void to_read(unsigned long k)
 	printf("about to set num\n");
 	num = strtoul(user_i, NULL, 0);
 	printf("num %i\n", (int)num);
-	int j;
-	for (j = 0; j < 100; ++j) {
-		printf("pages: %i\n",all_page[j].mem_addr);
-	}
 	if ((int)num == -1) {
 		printf("int -1");
 		/*while (i < k) {
@@ -37,8 +34,6 @@ void to_read(unsigned long k)
 		}*/
 	}
 	else if(num < k){
-		printf("in %ik\n", (int)num);
-		printf("size %i", (char*)(all_page + 1) - (char*)(all_page));
 		num = (int)num;
 		c = (char*)all_page[num].mem_addr;
 		if (*c == (int)0) {
@@ -47,6 +42,7 @@ void to_read(unsigned long k)
 		else {
 			printf(" [*] Page %lu: \n%s\n", num, c);
 		}
+		printf("kev");
 	}
 }
 
@@ -155,7 +151,7 @@ void all_pages()
 {
 	int j;
 	for (j = 0; j < 100; ++j) {
-		all_page[j].mem_addr = 0;
+		all_page[j].mem_addr = NULL;
 	}
 }
 
