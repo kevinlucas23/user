@@ -16,6 +16,7 @@ void to_read(unsigned long k)
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
 	num = strtoul(user_i, NULL, 0);
+	printf("num %i", (int)num);
 	if ((int)num == -1) {
 		printf("int -1");
 		while (i < k) {
