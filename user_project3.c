@@ -257,8 +257,7 @@ int connect_client(int port, struct map_info* k)
 	if (sockfd == -1) {
 		errExit("Socket client creation failed....\n");
 	}
-
-	printf("Connecting to: %d\n", port);
+	//printf("Connecting to: %d\n", port);
 	memset(&saddr, 0, sizeof(saddr));
 	saddr.sin_family = AF_INET;
 	saddr.sin_addr.s_addr = inet_addr("127.0.0.1");
