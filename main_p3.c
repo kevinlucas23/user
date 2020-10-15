@@ -38,10 +38,10 @@ int main(int argc, char* argv[])
 		sfd = connect_client(atoi(argv[2]), &k);
 		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		fault_region(&k, &handl, &thr);
+
 	}
 	
-	fault_region(&k, &handl, &thr);
-
 	for (;;) {
 		printf("\nWhat would you like to do? (r)ead/(w)rite/(v)iew msi/E(x)it?: ");
 		if (!fgets(user_i, 40, stdin))
