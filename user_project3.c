@@ -43,11 +43,11 @@ void to_read(unsigned long k)
 
 void to_write(unsigned long k, int port)
 {
-	char user_i[20], user_o[20];
+	char user_i[20] = { 0 }, user_o[20] = { 0 };
 	unsigned long num, i = 0;
 	struct info_mem kev;
 
-	printf("For which page do you like to write to? (0-%d, or -1 for all): ", (int)k);
+	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)k - 1));
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
 
