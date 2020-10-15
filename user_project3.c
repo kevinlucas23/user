@@ -69,7 +69,6 @@ void to_write(int port)
 		}
 	}
 	else if (num < num_pages) {
-		printf("\nCopying %s to address %p\n", user_o, all_page[(int)num].mem_addr);
 		memcpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
 		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
 		kev.size = (uint64_t)num;

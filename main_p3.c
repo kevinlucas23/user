@@ -30,6 +30,7 @@ int main(int argc, char* argv[])
 		fprintf(stderr, "Usage: %s port remote_port\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
+
 	all_pages();
 
 	printf("[*] Pairing...\n");
@@ -57,6 +58,7 @@ int main(int argc, char* argv[])
 			to_write(sfd);
 		}
 	}
+
 	printf("Exiting\n");
 	return 0;
 }
