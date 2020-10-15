@@ -55,6 +55,6 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr);
 void* socket_handler_thread(void* arg);
 
 int connect_server(int port);
-int connect_client(int port);
+int connect_client(int port, struct map_info* k);
 void delay(int secs);
 #endif /* end of include guard: __USER_PROJECT3_H_ */

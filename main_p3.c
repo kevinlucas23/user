@@ -4,6 +4,9 @@ extern struct info_mem kev;
 int main(int argc, char* argv[])
 {
 	int sfd = 0, data;
+	struct map_info k;
+	void* handl;
+	pthread_t thr;
 	FILE* fptr;
 	if ((fptr = fopen("data.txt", "r")) == NULL) {
 		errExit("Error! opening file");
@@ -31,8 +34,12 @@ int main(int argc, char* argv[])
 		sfd = connect_server(atoi(argv[1]));
 	}
 	if (data % 2 == 1) {
-		sfd = connect_client(atoi(argv[2]));
+		sfd = connect_client(atoi(argv[2]), &k);
+		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
+			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	}
+	
+	fault_region(k, &handl, &thr);
 	printf("Exiting\n");
 	return 0;
 }

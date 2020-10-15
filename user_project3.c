@@ -163,7 +163,7 @@ int connect_server(int port)
 	return connfd;
 }
 
-int connect_client(int port)
+int connect_client(int port, struct map_info* k)
 {
 	int sockfd, reaa;
 	struct sockaddr_in saddr;
@@ -203,6 +203,8 @@ int connect_client(int port)
 		errExit("Can't read");
 
 	printf("Request received addr: 0x%lx, and length: %lu\n", kev.addr, kev.size);
+	k->mem_addr = (void*)kev.addr;
+	k->length = kev.size;
 	close(sockfd);
 	return sockfd;
 }
