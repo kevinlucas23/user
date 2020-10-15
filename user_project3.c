@@ -44,7 +44,7 @@ void to_read()
 
 void to_write(int port)
 {
-	char user_i[20] = { 0 }, user_o[20] = { 0 };
+	char user_i[20] = { 0 }, user_o[40] = { 0 };
 	unsigned long num, i = 0;
 	struct info_mem kev;
 
@@ -55,29 +55,19 @@ void to_write(int port)
 	printf("What would you like to write?: ");
 	if (!fgets(user_o, 20, stdin))
 		errExit("fgets error");
-	printf("writing: %s", user_o);
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
 		while (i < num_pages) {
-			printf("ni here");
 			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
 			kev.addr = (uint64_t)all_page[(int)i].mem_addr;
-			if (write(port, &kev, sizeof(kev)) < 0) {
-				errExit("Error writing");
-			}
 			i++;
 		}
 	}
 	else if (num < num_pages) {
-		printf("lcuas\n");
 		printf("\nCopying %s to address %p\n", user_o, all_page[(int)num].mem_addr);
 		memcpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
-		printf("jaf\n");
 		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
 		kev.size = (uint64_t)num;
-		/*if (write(port, &kev, sizeof(kev)) < 0) {
-			errExit("Error writing");
-		}*/
 	}
 }
 
@@ -110,6 +100,7 @@ void* fault_handler_thread(void* arg)
 		nready = poll(&pollfd, 1, -1);
 		if (nready == -1)
 			errExit("poll");
+
 		nread = read(uffd, &msg, sizeof(msg));
 		if (nread == 0) {
 			printf("EOF on userfaultfd!\n");
@@ -133,7 +124,7 @@ void* fault_handler_thread(void* arg)
 
 		if (ioctl(uffd, UFFDIO_COPY, &uffdio_copy) == -1)
 			errExit("ioctl-UFFDIO_COPY");
-		printf("\n [%p] PAGEFAULT\n", (void*)msg.arg.pagefault.address);
+		printf("\n [X] PAGEFAULT\n");
 	}
 }
 

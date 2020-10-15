@@ -45,7 +45,9 @@ int main(int argc, char* argv[])
 
 	fault_region(&k, &handl, &thr);
 	equate_((uint64_t)k.mem_addr);
+
 	for (;;) {
+		pthread_join(&thr, NULL);
 		printf("\nWhich command should I run? (r:read, w:write): ");
 		if (!fgets(user_i, 40, stdin))
 			errExit("fgets error");
