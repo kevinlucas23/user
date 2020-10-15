@@ -1,6 +1,8 @@
 #include "user_project3.h"
 
-extern struct info_mem kev;
+//extern struct info_mem kev;
+struct map_info all_page[100];
+
 int main(int argc, char* argv[])
 {
 	int sfd = 0, data;

@@ -1,7 +1,6 @@
 #include "user_project3.h"
-struct map_info all_page[100];
 
-
+extern struct map_info all_page[];
 void delay(int secs)
 {
 	int milli_seconds = 1000 * secs;
