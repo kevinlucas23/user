@@ -78,6 +78,16 @@ void to_write(unsigned long k, int port)
 	}
 }
 
+void equate_(uint64_t addr)
+{
+	int i = 0;
+	uint64_t page = addr;
+	int size_p = sysconf(_SC_PAGE_SIZE);
+	for (i; i < 100; ++i, page += size_p) {
+		all_page[i].mem_addr = (void*)page;
+	}
+}
+
 void* fault_handler_thread(void* arg)
 {
 	static struct uffd_msg msg;   /* Data read from userfaultfd */
