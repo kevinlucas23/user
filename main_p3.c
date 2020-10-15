@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
 		errExit("Error! opening file");
 		// Program exits if the file pointer returns NULL.
 	}
-	fscanf(fptr, "%d", &data);
+	sfd = fscanf(fptr, "%d", &data);
 	fclose(fptr);
 
 	if ((fptr = fopen("data.txt", "w")) == NULL) {
