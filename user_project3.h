@@ -61,5 +61,5 @@ static void all_pages();
 int connect_server(int port);
 int connect_client(int port, struct map_info* k);
 void delay(int secs);
-void to_read(int k);
+void to_read(unsigned long k);
 #endif /* end of include guard: __USER_PROJECT3_H_ */

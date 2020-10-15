@@ -8,21 +8,35 @@ void delay(int secs)
 	while (clock() < start_time + milli_seconds);
 }
 
-void to_read(int k)
+void to_read(unsigned long k)
 {
 	char user_i[20], *c;
-	unsigned long num, i;
-	printf("For which page do you want to read? (0-%d, or -1 for all): ", (k-1));
-	if (!fgets(user_i, 40, stdin))
+	unsigned long num, i = 0;
+	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k - 1);
+	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
-		printf("it isj -1");
+		while (i < k) {
+			c = (char*)all_page[i].mem_addr;
+			if (*c == (int)0) {
+				printf(" [*] Page %lu:\n\n", i);
+			}
+			else {
+				printf(" [*] Page %lu: \n%s\n", i, c);
+			}
+			k++;
+		}
 	}
-	else {
-		printf("it is :%d", (int)num);
+	else if(num < k){
+		c = (char*)all_page[num].mem_addr;
+		if (*c == (int)0) {
+			printf(" [*] Page :\n\n");
+		}
+		else {
+			printf(" [*] Page %lu: \n%s\n", num, c);
+		}
 	}
-
 }
 
 void* fault_handler_thread(void* arg)
@@ -219,7 +233,7 @@ int connect_client(int port, struct map_info* k)
 	if (!fgets(buff, 20, stdin)) {
 		errExit("error getting input");
 	}
-	ok = (int)strtoul(buff, NULL, 0);
+	ok = strtoul(buff, NULL, 0);
 	reaa = write(sockfd, &buff, sizeof(buff));
 	if (reaa < 0)
 		errExit("Can't write");
