@@ -276,7 +276,6 @@ int connect_client(int port, struct map_info* k)
 		}
 		printf("[-] Connection Failed\n\n");
 		delay(1500);
-		close(sockfd);
 	}
 
 	printf("How many pages would you like to allocate? (greater than 0): ");
@@ -296,6 +295,6 @@ int connect_client(int port, struct map_info* k)
 	k->mem_addr = (void*)kev.addr;
 	k->length = kev.size;
 	all_pages();
-	//close(sockfd);
+	close(sockfd);
 	return ok;
 }
