@@ -58,7 +58,7 @@ void to_write(unsigned long k, int port)
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
 		while (i < k) {
-			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
+			memcpy(all_page[(int)i].mem_addr, user_o, sizeof(user_o));
 			kev.addr = (uint64_t)all_page[(int)i].mem_addr;
 			if (write(port, &kev, sizeof(kev)) <= 0) {
 				errExit("Error writing");
@@ -69,7 +69,7 @@ void to_write(unsigned long k, int port)
 	else if (num < k) {
 		printf("lcuas\n");
 		
-		memcpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
+		memcpy(all_page[(int)num].mem_addr, user_o, sizeof(user_o));
 		printf("jaf\n");
 		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
 		if (write(port, &kev, sizeof(kev)) <= 0) {
