@@ -147,7 +147,7 @@ int connect_server(int port)
   if(!fgets(buff, 100, stdin)){
     errExit("error getting input");
   }*/
-  reaa = read(sockfd, &buff, sizeof(buff));
+  reaa = read(connfd, &buff, sizeof(buff));
   if (reaa < 0)
       errExit("Can't read");
   
@@ -200,7 +200,7 @@ int connect_client(int port)
   if (!fgets(buff, 100, stdin)) {
       errExit("error getting input");
   }
-  reaa = write(connfd, &buff, sizeof(buff));
+  reaa = write(sockfd, &buff, sizeof(buff));
   if (reaa < 0)
       errExit("Can't write");
   //printf("Waiting for inputs\n");
