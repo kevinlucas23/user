@@ -34,7 +34,7 @@ void to_read(unsigned long k)
 	}
 	else if(num < k){
 		printf("in %ik\n", (int)num);
-		printf("size %i", sizeof(all_page) / sizeof(all_page[0]));
+		printf("size %i", (char*)(all_page + 1) - (char*)(all_page));
 		num = (int)num;
 		c = (char*)all_page[num].mem_addr;
 		if (*c == (int)0) {
