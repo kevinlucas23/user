@@ -39,15 +39,20 @@ int main(int argc, char* argv[])
 		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 		fault_region(&k, &handl, &thr);
+		for (;;) {
+			printf("\nWhich command should I run? (r:read, w:write): ");
+			if (!fgets(user_i, 40, stdin))
+				errExit("fgets error");
+			if (!strncmp(user_i, "r", 1)) {
+				to_read(sfd);
+			}
+			else if (!strncmp(user_i, "w", 1)) {
+
+			}
+		}
 
 	}
 	
-	for (;;) {
-		printf("\nWhat would you like to do? (r)ead/(w)rite/(v)iew msi/E(x)it?: ");
-		if (!fgets(user_i, 40, stdin))
-			errExit("fgets error");
-
-	}
 	printf("Exiting\n");
 	return 0;
 }

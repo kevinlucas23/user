@@ -49,12 +49,17 @@ struct socket_args {
 	int soc;
 };
 
+struct map_info all_page[100];
+
 void* fault_handler_thread(void* arg);
 long fault_region(struct map_info* k, void** start_handle, pthread_t* thr);
 
 void* socket_handler_thread(void* arg);
 
+static void all_pages();
+
 int connect_server(int port);
 int connect_client(int port, struct map_info* k);
 void delay(int secs);
+void to_read(int k);
 #endif /* end of include guard: __USER_PROJECT3_H_ */

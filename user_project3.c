@@ -8,6 +8,23 @@ void delay(int secs)
 	while (clock() < start_time + milli_seconds);
 }
 
+void to_read(int k)
+{
+	char user_i[20], *c;
+	unsigned long num, i;
+	printf("For which page do you want to read? (0-%d, or -1 for all): ", (k-1));
+	if (!fgets(user_i, 40, stdin))
+		errExit("fgets error");
+	num = strtoul(user_i, NULL, 0);
+	if ((int)num == -1) {
+		printf("it is -1");
+	}
+	else {
+		printf("it is :%d", (int)num);
+	}
+
+}
+
 void* fault_handler_thread(void* arg)
 {
 	static struct uffd_msg msg;   /* Data read from userfaultfd */
@@ -75,7 +92,6 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 		errExit("userfaultfd");
 	}	
 
-	printf("Request received addr yo: 0x%lx, and length: %lu\n", (uint64_t)k->mem_addr, k->length);
 	uffdio_api.api = UFFD_API;
 	uffdio_api.features = 0;
 	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1)
@@ -86,12 +102,6 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
 		errExit("ioctl-UFFDIO_REGISTER");
-
-	/*uffdio_register.range.start = (unsigned long)start_region;
-	uffdio_register.range.len = length;
-	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
-		errExit("ioctl-UFFDIO_REGISTER");*/
 
 	s = pthread_create(thr, NULL, fault_handler_thread, (void*)kev);
 	if (s != 0) {
@@ -114,6 +124,15 @@ void* socket_handler_thread(void* arg)
 	for(;;){
 	}*/
 	return (void*)0;
+}
+
+void all_pages()
+{
+	int j = 0;
+	while (j < 100) {
+		all_page[j].mem_addr = NULL;
+		j++;
+	}
 }
 
 int connect_server(int port)
@@ -172,7 +191,7 @@ int connect_server(int port)
 
 int connect_client(int port, struct map_info* k)
 {
-	int sockfd, reaa;
+	int sockfd, reaa, ok;
 	struct sockaddr_in saddr;
 	struct info_mem kev;
 	char buff[20];
@@ -200,7 +219,7 @@ int connect_client(int port, struct map_info* k)
 	if (!fgets(buff, 20, stdin)) {
 		errExit("error getting input");
 	}
-
+	ok = (int)strtoul(buff, NULL, 0);
 	reaa = write(sockfd, &buff, sizeof(buff));
 	if (reaa < 0)
 		errExit("Can't write");
@@ -213,5 +232,5 @@ int connect_client(int port, struct map_info* k)
 	k->mem_addr = (void*)kev.addr;
 	k->length = kev.size;
 	close(sockfd);
-	return sockfd;
+	return ok;
 }
