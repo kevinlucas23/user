@@ -75,7 +75,7 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 		errExit("userfaultfd");
 	}	
 
-	printf("Request received addr: 0x%lx, and length: %lu\n", (uint64_t)k->mem_addr, k->length);
+	printf("Request received addr yo: 0x%lx, and length: %lu\n", (uint64_t)k->mem_addr, k->length);
 	uffdio_api.api = UFFD_API;
 	uffdio_api.features = 0;
 	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1)
@@ -86,6 +86,12 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
 		errExit("ioctl-UFFDIO_REGISTER");
+
+	/*uffdio_register.range.start = (unsigned long)start_region;
+	uffdio_register.range.len = length;
+	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
+		errExit("ioctl-UFFDIO_REGISTER");*/
 
 	s = pthread_create(thr, NULL, fault_handler_thread, (void*)kev);
 	if (s != 0) {
