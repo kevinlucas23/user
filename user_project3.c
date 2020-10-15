@@ -272,11 +272,11 @@ int connect_client(int port, struct map_info* k)
 
 	for (;;) {
 		if (connect(sockfd, (struct sockaddr*)&saddr, sizeof(saddr)) == 0) {
-			close(sockfd);
 			break;
 		}
 		printf("[-] Connection Failed\n\n");
 		delay(1500);
+		close(sockfd);
 	}
 
 	printf("How many pages would you like to allocate? (greater than 0): ");
