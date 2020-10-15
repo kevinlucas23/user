@@ -4,7 +4,7 @@ extern struct info_mem kev;
 int main(int argc, char *argv[])
 {
   int sfd = 0, data;
-  File* fptr;
+  FILE* fptr;
   if ((fptr = fopen("data.txt", "r")) == NULL) {
       errExit("Error! opening file");
       // Program exits if the file pointer returns NULL.
