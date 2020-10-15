@@ -194,9 +194,9 @@ int connect_client(int port)
      break;
    }
    printf("[-] Connection Failed\n\n");
-   delay(1000);
+   delay(2000);
   }
-  printf("How many pages do you want to mmap?: ");
+  printf("How many pages would you like to allocate? (greater than 0): ");
   if (!fgets(buff, 100, stdin)) {
       errExit("error getting input");
   }
