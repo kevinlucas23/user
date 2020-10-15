@@ -249,6 +249,7 @@ int connect_client(int port, struct map_info* k)
 	printf("Request received addr: 0x%lx, and length: %lu\n", kev.addr, kev.size);
 	k->mem_addr = (void*)kev.addr;
 	k->length = kev.size;
+	all_pages();
 	close(sockfd);
 	return ok;
 }
