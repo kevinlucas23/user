@@ -149,6 +149,7 @@ void all_pages()
 {
 	int j;
 	for (j = 0; j < 100; ++j) {
+		printf("j: %i", j);
 		all_page[j].mem_addr = NULL;
 	}
 }
