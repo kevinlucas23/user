@@ -54,7 +54,7 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr);
 
 void* socket_handler_thread(void* arg);
 
-static void all_pages();
+void all_pages();
 
 int connect_server(int port);
 int connect_client(int port, struct map_info* k);

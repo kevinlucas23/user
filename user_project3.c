@@ -1,5 +1,5 @@
 #include "user_project3.h"
-static struct map_info all_page[100];
+struct map_info all_page[100];
 
 
 void delay(int secs)
