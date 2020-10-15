@@ -28,31 +28,31 @@
 #define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE);	\
 	} while (0)
 
-struct user_args{
-  long uffd;
-  uint64_t pre_addr;
+struct user_args {
+	long uffd;
+	uint64_t pre_addr;
 };
 
-struct map_info{
+struct map_info {
 	uint64_t length;
-  void* mem_addr;
+	void* mem_addr;
 };
 
-struct info_mem{
-  uint64_t addr;
-  uint64_t size;
+struct info_mem {
+	uint64_t addr;
+	uint64_t size;
 };
 
-struct socket_args{
+struct socket_args {
 	uint64_t length;
-  uint64_t mem_address;
-  int soc;
+	uint64_t mem_address;
+	int soc;
 };
 
-void* fault_handler_thread(void *arg);
+void* fault_handler_thread(void* arg);
 long fault_region(struct map_info* k, void** start_handle, pthread_t* thr);
 
-void* socket_handler_thread(void *arg);
+void* socket_handler_thread(void* arg);
 
 int connect_server(int port);
 int connect_client(int port);
