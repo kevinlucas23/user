@@ -17,6 +17,7 @@ void to_read(unsigned long k)
 		errExit("fgets error");
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
+		printf("int -1");
 		while (i < k) {
 			c = (char*)all_page[i].mem_addr;
 			if (*c == (int)0) {
@@ -29,6 +30,7 @@ void to_read(unsigned long k)
 		}
 	}
 	else if(num < k){
+		printf("in k");
 		c = (char*)all_page[num].mem_addr;
 		if (*c == (int)0) {
 			printf(" [*] Page :\n\n");
