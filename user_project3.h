@@ -49,7 +49,7 @@ struct socket_args {
 	int soc;
 };
 
-struct map_info all_page[100];
+static struct map_info all_page[100];
 
 void* fault_handler_thread(void* arg);
 long fault_region(struct map_info* k, void** start_handle, pthread_t* thr);

@@ -142,10 +142,9 @@ void* socket_handler_thread(void* arg)
 
 void all_pages()
 {
-	int j = 0;
-	while (j < 100) {
+	int j;
+	for (j = 0; j < 100; ++j) {
 		all_page[j].mem_addr = NULL;
-		j++;
 	}
 }
 
