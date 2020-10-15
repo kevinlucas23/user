@@ -143,10 +143,13 @@ int connect_server(int port)
   }
   
   printf("[*] Paired!\n");
-  printf("How many pages do you want to mmap?: ");
+  /*printf("How many pages do you want to mmap?: ");
   if(!fgets(buff, 100, stdin)){
     errExit("error getting input");
-  }
+  }*/
+  reaa = read(sockfd, &buff, sizeof(buff));
+  if (reaa < 0)
+      errExit("Can't read");
   
   length = strtoul(buff, NULL, 0) * sysconf(_SC_PAGE_SIZE);
   map_t = mmap(NULL, length, PROT_READ | PROT_WRITE,
@@ -170,6 +173,7 @@ int connect_client(int port)
   int sockfd, reaa;
   struct sockaddr_in saddr;
   struct info_mem kev;
+  char buff[100];
   sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
   if(sockfd == -1){
     errExit("Socket client creation failed....\n"); 
@@ -192,8 +196,14 @@ int connect_client(int port)
    printf("[-] Connection Failed\n\n");
    delay(1000);
   }
-  
-  printf("Waiting for inputs\n");
+  printf("How many pages do you want to mmap?: ");
+  if (!fgets(buff, 100, stdin)) {
+      errExit("error getting input");
+  }
+  reaa = write(connfd, &buff, sizeof(buff));
+  if (reaa < 0)
+      errExit("Can't write");
+  //printf("Waiting for inputs\n");
   reaa = read(sockfd, &kev, sizeof(kev));
   if(reaa < 0)
     errExit("Can't read");
