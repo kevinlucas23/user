@@ -18,9 +18,9 @@ void to_read(unsigned long k)
 	printf("about to set num");
 	num = strtoul(user_i, NULL, 0);
 	printf("num %i", (int)num);
-	/*if ((int)num == -1) {
+	if ((int)num == -1) {
 		printf("int -1");
-		while (i < k) {
+		/*while (i < k) {
 			c = (char*)all_page[i].mem_addr;
 			if (*c == (int)0) {
 				printf(" [*] Page %lu:\n\n", i);
@@ -29,18 +29,18 @@ void to_read(unsigned long k)
 				printf(" [*] Page %lu: \n%s\n", i, c);
 			}
 			k++;
-		}
+		}*/
 	}
 	else if(num < k){
 		printf("in k");
-		c = (char*)all_page[num].mem_addr;
+		/*c = (char*)all_page[num].mem_addr;
 		if (*c == (int)0) {
 			printf(" [*] Page :\n\n");
 		}
 		else {
 			printf(" [*] Page %lu: \n%s\n", num, c);
-		}
-	}*/
+		}*/
+	}
 }
 
 void* fault_handler_thread(void* arg)
