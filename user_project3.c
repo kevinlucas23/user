@@ -135,14 +135,14 @@ int connect_server(int port)
     errExit("Socket server listen failed...\n");
   }
   
-  printf("Waiting for connections...\n");
+  //printf("Waiting for connections...\n");
   
   connfd = accept(sockfd, NULL, NULL);
   if(connfd < 0){
     errExit("Socket server accept failed..\n");
   }
   
-  printf("Connected Successfully.\n");
+  printf("[*] Paired!\n");
   printf("How many pages do you want to mmap?: ");
   if(!fgets(buff, 100, stdin)){
     errExit("error getting input");
