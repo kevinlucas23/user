@@ -39,10 +39,10 @@ void to_read(unsigned long k)
 		/*if (all_page[num].mem_addr == NULL) {
 			printf("it is working");
 		}*/
-		/*if (*c == (int)0) {
+		if (*c == (int)0) {
 			printf(" [*] Page :\n\n");
 		}
-		else {
+		/*else {
 			printf(" [*] Page %lu: \n%s\n", num, c);
 		}
 		printf("kev");*/
