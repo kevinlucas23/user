@@ -54,10 +54,10 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr);
 
 void* socket_handler_thread(void* arg);
 
-void all_pages();
+//static void all_pages();
 
 int connect_server(int port);
 int connect_client(int port, struct map_info* k);
 void delay(int secs);
-void to_read(unsigned long k);
+//static void to_read(unsigned long k);
 #endif /* end of include guard: __USER_PROJECT3_H_ */

@@ -9,7 +9,7 @@ void delay(int secs)
 	while (clock() < start_time + milli_seconds);
 }
 
-void to_read(unsigned long k)
+static void to_read(unsigned long k)
 {
 	char user_i[20], *c;
 	unsigned long num, i = 0;
@@ -145,7 +145,7 @@ void* socket_handler_thread(void* arg)
 	return (void*)0;
 }
 
-void all_pages()
+static void all_pages()
 {
 	int j;
 	for (j = 0; j < 100; ++j) {
