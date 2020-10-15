@@ -272,6 +272,7 @@ int connect_client(int port, struct map_info* k)
 
 	for (;;) {
 		if (connect(sockfd, (struct sockaddr*)&saddr, sizeof(saddr)) == 0) {
+			close(sockfd);
 			break;
 		}
 		printf("[-] Connection Failed\n\n");
@@ -295,6 +296,6 @@ int connect_client(int port, struct map_info* k)
 	k->mem_addr = (void*)kev.addr;
 	k->length = kev.size;
 	all_pages();
-	close(sockfd);
+	//close(sockfd);
 	return ok;
 }
