@@ -15,7 +15,7 @@ void to_read(unsigned long k)
 	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k);
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
-	printf("about to set num");
+	printf("about to set num\n");
 	num = strtoul(user_i, NULL, 0);
 	printf("num %i", (int)num);
 	if ((int)num == -1) {
@@ -32,14 +32,14 @@ void to_read(unsigned long k)
 		}*/
 	}
 	else if(num < k){
-		printf("in k");
-		/*c = (char*)all_page[num].mem_addr;
+		printf("in k\n");
+		c = (char*)all_page[(int)num].mem_addr;
 		if (*c == (int)0) {
 			printf(" [*] Page :\n\n");
 		}
 		else {
 			printf(" [*] Page %lu: \n%s\n", num, c);
-		}*/
+		}
 	}
 }
 
