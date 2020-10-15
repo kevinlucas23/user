@@ -75,6 +75,7 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 		errExit("userfaultfd");
 	}	
 
+	printf("Request received addr: 0x%lx, and length: %lu\n", (uint64_t)k->mem_addr, k->length);
 	uffdio_api.api = UFFD_API;
 	uffdio_api.features = 0;
 	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1)
