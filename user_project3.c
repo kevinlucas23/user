@@ -51,11 +51,16 @@ void to_write(int port)
 	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)num_pages - 1));
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
+	num = strtoul(user_i, NULL, 0);
+	if (num >= num_pages) {
+		printf("\nout of page range");
+		return;
+	}
 
 	printf("What would you like to write?: ");
 	if (!fgets(user_o, 20, stdin))
 		errExit("fgets error");
-	num = strtoul(user_i, NULL, 0);
+	
 	if ((int)num == -1) {
 		while (i < num_pages) {
 			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
