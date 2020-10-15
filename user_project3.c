@@ -33,7 +33,7 @@ void to_read(unsigned long k)
 		}*/
 	}
 	else if(num < k){
-		printf("in k\n");
+		printf("in %ik\n", (int)num);
 		c = (char*)all_page[(int)num].mem_addr;
 		if (*c == (int)0) {
 			printf(" [*] Page :\n\n");
