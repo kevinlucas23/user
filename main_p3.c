@@ -7,6 +7,7 @@ int main(int argc, char* argv[])
 	struct map_info k;
 	void* handl;
 	pthread_t thr;
+	char user_i[40];
 	FILE* fptr;
 	if ((fptr = fopen("data.txt", "r")) == NULL) {
 		errExit("Error! opening file");
@@ -40,6 +41,13 @@ int main(int argc, char* argv[])
 	}
 	
 	fault_region(k, &handl, &thr);
+
+	for (;;) {
+		printf("\nWhat would you like to do? (r)ead/(w)rite/(v)iew msi/E(x)it?: ");
+		if (!fgets(user_i, 40, stdin))
+			errExit("fgets error");
+
+	}
 	printf("Exiting\n");
 	return 0;
 }
