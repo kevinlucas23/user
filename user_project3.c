@@ -74,9 +74,9 @@ void to_write(unsigned long k, int port)
 		printf("jaf\n");
 		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
 		kev.size = (uint64_t)num;
-		if (write(port, &kev, sizeof(kev)) < 0) {
+		/*if (write(port, &kev, sizeof(kev)) < 0) {
 			errExit("Error writing");
-		}
+		}*/
 	}
 }
 
