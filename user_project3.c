@@ -84,7 +84,7 @@ void equate_(uint64_t addr)
 	int i = 0;
 	uint64_t page = addr;
 	int size_p = sysconf(_SC_PAGE_SIZE);
-	for (i; i < 100; ++i, page += size_p) {
+	for (i = 0; i < 100; ++i, page += size_p) {
 		all_page[i].mem_addr = (void*)page;
 	}
 }
