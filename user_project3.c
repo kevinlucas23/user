@@ -1,4 +1,6 @@
 #include "user_project3.h"
+static struct map_info all_page[100];
+
 
 void delay(int secs)
 {
@@ -17,7 +19,7 @@ void to_read(unsigned long k)
 		errExit("fgets error");
 	printf("about to set num\n");
 	num = strtoul(user_i, NULL, 0);
-	printf("num %i", (int)num);
+	printf("num %i\n", (int)num);
 	if ((int)num == -1) {
 		printf("int -1");
 		/*while (i < k) {
