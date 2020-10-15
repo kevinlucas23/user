@@ -17,7 +17,7 @@ void to_read(int k)
 		errExit("fgets error");
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
-		printf("it is -1");
+		printf("it isj -1");
 	}
 	else {
 		printf("it is :%d", (int)num);
