@@ -56,7 +56,6 @@ int main(int argc, char* argv[])
 		else if (!strncmp(user_i, "w", 1)) {
 			to_write(sfd);
 		}
-		pthread_join(&thr, NULL);
 	}
 	printf("Exiting\n");
 	return 0;
