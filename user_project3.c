@@ -12,14 +12,13 @@ void* fault_handler_thread(void* arg)
 {
 	static struct uffd_msg msg;   /* Data read from userfaultfd */
 	long uffd;                    /* userfaultfd file descriptor */
+	struct user_args* kev = (struct user_args*)arg;
 	struct uffdio_copy uffdio_copy;
 	ssize_t nread;
-	static int fault_cnt = 0;
-	struct user_args* kev = (struct user_args*)arg;
+	//static int fault_cnt = 0;
 	char* page = (char*)kev->pre_addr;
 	uffd = kev->uffd;
-	// static char *page = NULL;
-	// uffd = (long)arg;
+	
 	for (;;) {
 		struct pollfd pollfd;
 		int nready;
@@ -41,7 +40,7 @@ void* fault_handler_thread(void* arg)
 			fprintf(stderr, "Unexpected event on userfaultfd\n");
 			exit(EXIT_FAILURE);
 		}
-		fault_cnt++;
+
 		uffdio_copy.src = (unsigned long)page;
 		uffdio_copy.dst = (unsigned long)msg.arg.pagefault.address &
 			~(sysconf(_SC_PAGE_SIZE) - 1);
@@ -63,11 +62,6 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 	int s;
 	struct user_args* kev = (struct user_args*)malloc(sizeof(struct user_args));
 
-	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-	if (uffd == -1) {
-		errExit("userfaultfd");
-	}
-
 	*start_handle = mmap(NULL, k->length, PROT_READ | PROT_WRITE,
 		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	if (*start_handle == MAP_FAILED)
@@ -76,6 +70,10 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 
 	kev->pre_addr = (uint64_t)*start_handle;
 	kev->uffd = uffd;
+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+	if (uffd == -1) {
+		errExit("userfaultfd");
+	}	
 
 	uffdio_api.api = UFFD_API;
 	uffdio_api.features = 0;
@@ -162,7 +160,6 @@ int connect_server(int port)
 	if (reaa < 0)
 		errExit("Can't write");
 	close(sockfd);
-
 	return connfd;
 }
 
@@ -189,7 +186,7 @@ int connect_client(int port)
 			break;
 		}
 		printf("[-] Connection Failed\n\n");
-		delay(2000);
+		delay(1500);
 	}
 
 	printf("How many pages would you like to allocate? (greater than 0): ");
