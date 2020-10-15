@@ -13,15 +13,15 @@ OBJ_FILES := user_project3.o main_p3.o
 EXE_FILES = $(SRC_FILES:.c=)
 
 %.o:%.c $(DEPS_DIR)
-        $(CC) $(CFLAGS) $(DEPCFLAGS) -c $(input) -o $(output)
+	$(CC) $(CFLAGS) $(DEPCFLAGS) -c $(input) -o $(output)
 
 main_p3: $(OBJ_FILES)
-        $(CC) -o $@ $(CFLAGS) $(OBJ_FILES) $(LDFLAGS)
+	$(CC) -o $@ $(CFLAGS) $(OBJ_FILES) $(LDFLAGS)
 
 all: $(EXE_FILES)
-        echo $(EXE_FILES)
+	echo $(EXE_FILES)
 
 clean:
-        rm -f main_p3 $(OBJ_FILES)
+	rm -f main_p3 $(OBJ_FILES)
 
 .PHONY: all clean
