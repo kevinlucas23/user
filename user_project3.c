@@ -257,7 +257,7 @@ int connect_server(int port, struct map_info* k)
 
 int connect_client(int port, struct map_info* k)
 {
-	int sockfd, reaa, ok;
+	int sockfd, reaa;
 	struct sockaddr_in saddr;
 	struct info_mem kev;
 	char buff[20];

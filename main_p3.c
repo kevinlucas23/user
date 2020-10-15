@@ -5,7 +5,7 @@ struct map_info all_page[100];
 
 int main(int argc, char* argv[])
 {
-	int sfd = 0, data, port;
+	int sfd = 0, data;
 	struct map_info k;
 	void* handl;
 	pthread_t thr;
