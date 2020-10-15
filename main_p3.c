@@ -30,10 +30,12 @@ int main(int argc, char* argv[])
 		fprintf(stderr, "Usage: %s port remote_port\n", argv[0]);
 		exit(EXIT_FAILURE);
 	}
+	all_pages();
+
 	printf("[*] Pairing...\n");
 
 	if (data % 2 == 0) {
-		sfd = connect_server(atoi(argv[1]));
+		sfd = connect_server(atoi(argv[1]), &k);
 	}
 	if (data % 2 == 1) {
 		port = atoi(argv[1]);

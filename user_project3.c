@@ -200,7 +200,7 @@ void all_pages()
 	}
 }
 
-int connect_server(int port)
+int connect_server(int port, struct map_info* k)
 {
 	int sockfd, connfd, length, reaa;
 	struct sockaddr_in saddr;
@@ -246,7 +246,8 @@ int connect_server(int port)
 	printf("mmap addr: %p, and length: %d\n", map_t, length);
 	kev.addr = (uint64_t)map_t;
 	kev.size = length;
-
+	k->mem_addr = (void*)kev.addr;
+	k->length = kev.size;
 	reaa = write(connfd, &kev, sizeof(kev));
 	if (reaa < 0)
 		errExit("Can't write");
@@ -296,7 +297,6 @@ int connect_client(int port, struct map_info* k)
 	printf("Request received addr: 0x%lx, and length: %lu\n", kev.addr, kev.size);
 	k->mem_addr = (void*)kev.addr;
 	k->length = kev.size;
-	all_pages();
 	close(sockfd);
 	return sockfd;
 }
