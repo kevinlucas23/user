@@ -47,7 +47,6 @@ int main(int argc, char* argv[])
 	equate_((uint64_t)k.mem_addr);
 
 	for (;;) {
-		pthread_join(&thr, NULL);
 		printf("\nWhich command should I run? (r:read, w:write): ");
 		if (!fgets(user_i, 40, stdin))
 			errExit("fgets error");
@@ -57,6 +56,7 @@ int main(int argc, char* argv[])
 		else if (!strncmp(user_i, "w", 1)) {
 			to_write(sfd);
 		}
+		pthread_join(&thr, NULL);
 	}
 	printf("Exiting\n");
 	return 0;
