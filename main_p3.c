@@ -36,7 +36,6 @@ int main(int argc, char* argv[])
 		sfd = connect_server(atoi(argv[1]));
 	}
 	if (data % 2 == 1) {
-		all_pages();
 		sfd = connect_client(atoi(argv[2]), &k);
 		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);

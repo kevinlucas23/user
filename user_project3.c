@@ -151,8 +151,8 @@ void all_pages()
 {
 	int j;
 	for (j = 0; j < 100; ++j) {
-		printf("j: %i", j);
-		all_page[j].mem_addr = NULL;
+		all_page[j].mem_addr = 0;
+		printf("pages: %p", all_page[j].mem_addr)
 	}
 }
 
@@ -252,6 +252,7 @@ int connect_client(int port, struct map_info* k)
 	printf("Request received addr: 0x%lx, and length: %lu\n", kev.addr, kev.size);
 	k->mem_addr = (void*)kev.addr;
 	k->length = kev.size;
+	all_pages();
 	close(sockfd);
 	return ok;
 }
