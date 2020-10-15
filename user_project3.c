@@ -61,7 +61,7 @@ void to_write(unsigned long k, int port)
 			printf("ni here");
 			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
 			kev.addr = (uint64_t)all_page[(int)i].mem_addr;
-			if (write(port, &kev, sizeof(kev)) <= 0) {
+			if (write(port, &kev, sizeof(kev)) < 0) {
 				errExit("Error writing");
 			}
 			i++;
@@ -73,7 +73,8 @@ void to_write(unsigned long k, int port)
 		memcpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
 		printf("jaf\n");
 		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
-		if (write(port, &kev, sizeof(kev)) <= 0) {
+		kev.size = (uint64_t)num;
+		if (write(port, &kev, sizeof(kev)) < 0) {
 			errExit("Error writing");
 		}
 	}
