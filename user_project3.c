@@ -152,7 +152,7 @@ void all_pages()
 	int j;
 	for (j = 0; j < 100; ++j) {
 		all_page[j].mem_addr = 0;
-		printf("pages: %p", all_page[j].mem_addr);
+		printf("pages: %i", all_page[j].mem_addr);
 	}
 }
 
