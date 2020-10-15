@@ -68,9 +68,9 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 		errExit("mmap");
 	memset(*start_handle, 0, k->length);
 
+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
 	kev->pre_addr = (uint64_t)*start_handle;
 	kev->uffd = uffd;
-	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
 	if (uffd == -1) {
 		errExit("userfaultfd");
 	}	
