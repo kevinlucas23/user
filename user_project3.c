@@ -54,6 +54,7 @@ void to_write(unsigned long k, int port)
 	printf("What would you like to write?: ");
 	if (!fgets(user_o, 20, stdin))
 		errExit("fgets error");
+	printf("writing: %s", user_o);
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
 		while (i < k) {
