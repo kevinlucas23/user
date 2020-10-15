@@ -236,7 +236,7 @@ int connect_server(int port, struct map_info* k)
 	reaa = read(connfd, &buff, sizeof(buff));
 	if (reaa < 0)
 		errExit("Can't read");
-
+	num_pages = strtoul(buff, NULL, 0);
 	length = strtoul(buff, NULL, 0) * sysconf(_SC_PAGE_SIZE);
 	map_t = mmap(NULL, length, PROT_READ | PROT_WRITE,
 		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
