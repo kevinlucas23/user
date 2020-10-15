@@ -27,7 +27,7 @@ void to_read(unsigned long k)
 			else {
 				printf(" [*] Page %lu: %s\n", i, c);
 			}
-			k++;
+			i++;
 		 }
 	}
 	else if(num < k){
@@ -62,7 +62,7 @@ void to_write(unsigned long k, int port)
 			if (write(port, &kev, sizeof(kev)) <= 0) {
 				errExit("Error writing");
 			}
-			k++;
+			i++;
 		}
 	}
 	else if (num < k) {
