@@ -12,7 +12,7 @@ void delay(int secs)
 void to_read(unsigned long k)
 {
 	char user_i[20];
-	char* c;
+	char* c = NULL;
 	unsigned long num, i = 0;
 	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k);
 	if (!fgets(user_i, 20, stdin))
@@ -35,9 +35,9 @@ void to_read(unsigned long k)
 	}
 	else if(num < k){
 		num = (int)num;
-		if (all_page[num].mem_addr == NULL) {
+		/*if (all_page[num].mem_addr == NULL) {
 			printf("it is working");
-		}
+		}*/
 		if (*c == (int)0) {
 			printf(" [*] Page :\n\n");
 		}
