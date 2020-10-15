@@ -35,7 +35,9 @@ void to_read(unsigned long k)
 	}
 	else if(num < k){
 		num = (int)num;
-		c = (char*)all_page[num].mem_addr;
+		if (all_page[num].mem_addr == NULL) {
+			printf("it is working");
+		}
 		if (*c == (int)0) {
 			printf(" [*] Page :\n\n");
 		}
