@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
 		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 		fault_region(&k, &handl, &thr);
+		equate_((uint64_t)k.mem_addr);
 		for (;;) {
 			printf("\nWhich command should I run? (r:read, w:write): ");
 			if (!fgets(user_i, 40, stdin))
