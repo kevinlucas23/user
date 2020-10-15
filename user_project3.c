@@ -12,10 +12,11 @@ void to_read(unsigned long k)
 {
 	char user_i[20], *c;
 	unsigned long num, i = 0;
-	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k - 1);
+	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k);
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
-	num = strtoul(user_i, NULL, 0);
+	printf("about to set num");
+	/*num = strtoul(user_i, NULL, 0);
 	printf("num %i", (int)num);
 	if ((int)num == -1) {
 		printf("int -1");
@@ -39,7 +40,7 @@ void to_read(unsigned long k)
 		else {
 			printf(" [*] Page %lu: \n%s\n", num, c);
 		}
-	}
+	}*/
 }
 
 void* fault_handler_thread(void* arg)
