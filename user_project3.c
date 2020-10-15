@@ -12,40 +12,65 @@ void delay(int secs)
 void to_read(unsigned long k)
 {
 	char user_i[20];
-	char* c = NULL;
+	char* c;
 	unsigned long num, i = 0;
 	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k);
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
-	printf("about to set num\n");
 	num = strtoul(user_i, NULL, 0);
-	printf("num %i\n", (int)num);
 	if ((int)num == -1) {
-		printf("int -1");
-		/*while (i < k) {
-			c = (char*)all_page[i].mem_addr;
-			if (*c == (int)0) {
-				printf(" [*] Page %lu:\n\n", i);
+		 while (i < k) {
+			c = (char*)all_page[(int)i].mem_addr;
+			if (c == NULL) {
+				printf(" [*] Page %lu:\n", i);
 			}
 			else {
-				printf(" [*] Page %lu: \n%s\n", i, c);
+				printf(" [*] Page %lu: %s\n", i, c);
 			}
 			k++;
-		}*/
+		 }
 	}
 	else if(num < k){
-		num = (int)num;
-		c = all_page[num].mem_addr;
-		/*if (all_page[num].mem_addr == NULL) {
-			printf("it is working");
-		}*/
+		c = (char*)all_page[(int)num].mem_addr;
 		if (c == NULL) {
-			printf(" [*] Page :\n\n");
+			printf(" [*] Page :\n");
 		}
-		/*else {
-			printf(" [*] Page %lu: \n%s\n", num, c);
+		else {
+			printf(" [*] Page %lu: %s\n", num, c);
 		}
-		printf("kev");*/
+	}
+}
+
+void to_write(unsigned long k, int port)
+{
+	char user_i[20], user_o[20];
+	unsigned long num, i = 0;
+	struct info_mem kev;
+
+	printf("For which page do you like to write to? (0-%d, or -1 for all): ", (int)k);
+	if (!fgets(user_i, 20, stdin))
+		errExit("fgets error");
+
+	printf("What would you like to write?: ");
+	if (!fgets(user_o, 20, stdin))
+		errExit("fgets error");
+	num = strtoul(user_i, NULL, 0);
+	if ((int)num == -1) {
+		while (i < k) {
+			memccpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
+			kev.addr = (uint64_t)all_page[(int)i].mem_addr;
+			if (write(port, &kev, sizeof(kev) <= 0) {
+				errExit("Error writing");
+			}
+			k++;
+		}
+	}
+	else if (num < k) {
+		memccpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
+		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
+		if (write(port, &kev, sizeof(kev) <= 0) {
+			errExit("Error writing");
+		}
 	}
 }
 
