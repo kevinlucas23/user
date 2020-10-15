@@ -179,17 +179,17 @@ int connect_client(int port)
   saddr.sin_addr.s_addr = inet_addr("127.0.0.1");
   saddr.sin_port = htons(port);
   
-  if(connect(sockfd,(struct sockaddr *)&saddr, sizeof(saddr)) != 0) {
+  /*if(connect(sockfd,(struct sockaddr *)&saddr, sizeof(saddr)) != 0) {
     printf("[-] Connecting to server\n");
     return -1;
-  }
-  /*for(;;){
+  }*/
+  for(;;){
    if(connect(sockfd,(struct sockaddr *)&saddr, sizeof(saddr)) == 0){
      break;
    }
    printf("[-] Connection Failed\n\n");
    delay(1000);
-  }*/
+  }
   
   printf("Waiting for inputs\n");
   reaa = read(sockfd, &kev, sizeof(kev));
