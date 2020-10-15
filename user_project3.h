@@ -59,7 +59,7 @@ static void all_pages();
 int connect_server(int port);
 int connect_client(int port, struct map_info* k);
 void delay(int secs);
-void to_read(unsigned long k);
-void to_write(unsigned long k, int port);
+void to_read();
+void to_write(int port);
 void equate_(uint64_t addr);
 #endif /* end of include guard: __USER_PROJECT3_H_ */

@@ -1,5 +1,6 @@
 #include "user_project3.h"
 
+unsigned long num_pages;
 extern struct map_info all_page[];
 void delay(int secs)
 {
@@ -9,17 +10,17 @@ void delay(int secs)
 	while (clock() < start_time + milli_seconds);
 }
 
-void to_read(unsigned long k)
+void to_read()
 {
 	char user_i[20];
 	char* c;
 	unsigned long num, i = 0;
-	printf("For which page do you want to read? (0-%d, or -1 for all): ", (int)k);
+	printf("For which page do you want to read? (0-%d, or -1 for all): ", ((int)num_pages - 1));
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
-		 while (i < k) {
+		 while (i < num_pages) {
 			c = (char*)all_page[(int)i].mem_addr;
 			if (c == NULL) {
 				printf(" [*] Page %lu:\n", i);
@@ -30,7 +31,7 @@ void to_read(unsigned long k)
 			i++;
 		 }
 	}
-	else if(num < k){
+	else if(num < num_pages){
 		c = (char*)all_page[(int)num].mem_addr;
 		if (c == NULL) {
 			printf(" [*] Page :\n");
@@ -41,13 +42,13 @@ void to_read(unsigned long k)
 	}
 }
 
-void to_write(unsigned long k, int port)
+void to_write(int port)
 {
 	char user_i[20] = { 0 }, user_o[20] = { 0 };
 	unsigned long num, i = 0;
 	struct info_mem kev;
 
-	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)k - 1));
+	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)num_pages - 1));
 	if (!fgets(user_i, 20, stdin))
 		errExit("fgets error");
 
@@ -57,7 +58,7 @@ void to_write(unsigned long k, int port)
 	printf("writing: %s", user_o);
 	num = strtoul(user_i, NULL, 0);
 	if ((int)num == -1) {
-		while (i < k) {
+		while (i < num_pages) {
 			printf("ni here");
 			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
 			kev.addr = (uint64_t)all_page[(int)i].mem_addr;
@@ -67,7 +68,7 @@ void to_write(unsigned long k, int port)
 			i++;
 		}
 	}
-	else if (num < k) {
+	else if (num < num_pages) {
 		printf("lcuas\n");
 		printf("\nCopying %s to address %p\n", user_o, all_page[(int)num].mem_addr);
 		memcpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
@@ -283,7 +284,7 @@ int connect_client(int port, struct map_info* k)
 	if (!fgets(buff, 20, stdin)) {
 		errExit("error getting input");
 	}
-	ok = strtoul(buff, NULL, 0);
+	num_pages = strtoul(buff, NULL, 0);
 	reaa = write(sockfd, &buff, sizeof(buff));
 	if (reaa < 0)
 		errExit("Can't write");
@@ -297,5 +298,5 @@ int connect_client(int port, struct map_info* k)
 	k->length = kev.size;
 	all_pages();
 	close(sockfd);
-	return ok;
+	return sockfd;
 }

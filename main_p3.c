@@ -40,25 +40,21 @@ int main(int argc, char* argv[])
 		sfd = connect_client(atoi(argv[2]), &k);
 		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-		fault_region(&k, &handl, &thr);
-		equate_((uint64_t)k.mem_addr);
-		for (;;) {
-			printf("\nWhich command should I run? (r:read, w:write): ");
-			if (!fgets(user_i, 40, stdin))
-				errExit("fgets error");
-			if (!strncmp(user_i, "r", 1)) {
-				to_read(sfd);
-			}
-			else if (!strncmp(user_i, "w", 1)) {
-				to_write(sfd, port);
-			}
-			else {
-				printf("Exiting\n");
-				return 0;
-			}
-		}
-
 	}
 
-
+	fault_region(&k, &handl, &thr);
+	equate_((uint64_t)k.mem_addr);
+	for (;;) {
+		printf("\nWhich command should I run? (r:read, w:write): ");
+		if (!fgets(user_i, 40, stdin))
+			errExit("fgets error");
+		if (!strncmp(user_i, "r", 1)) {
+			to_read();
+		}
+		else if (!strncmp(user_i, "w", 1)) {
+			to_write(sfd);
+		}
+	}
+	printf("Exiting\n");
+	return 0;
 }
