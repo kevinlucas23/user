@@ -38,7 +38,6 @@ int main(int argc, char* argv[])
 		sfd = connect_server(atoi(argv[1]), &k);
 	}
 	if (data % 2 == 1) {
-		port = atoi(argv[1]);
 		sfd = connect_client(atoi(argv[2]), &k);
 		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
