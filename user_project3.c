@@ -114,7 +114,7 @@ void* socket_handler_thread(void *arg)
 
 int connect_server(int port)
 {
-  int sockfd, connfd, length;
+    int sockfd, connfd, length, reaa;
   struct sockaddr_in saddr;
   char buff[100];
     struct info_mem kev;
@@ -157,7 +157,9 @@ int connect_server(int port)
   printf("mmap addr: %p, and length: %d\n", map_t, length);
   kev.addr = (uint64_t)map_t;
   kev.size = length;
-  write(connfd, &kev, sizeof(kev));
+  reaa = write(connfd, &kev, sizeof(kev));
+  if (reaa < 0)
+      errExit("Can't write");
   close(sockfd);
   
   return connfd;
