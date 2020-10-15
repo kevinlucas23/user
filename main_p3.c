@@ -5,7 +5,7 @@ struct map_info all_page[100];
 
 int main(int argc, char* argv[])
 {
-	int sfd = 0, data;
+	int sfd = 0, data, port;
 	struct map_info k;
 	void* handl;
 	pthread_t thr;
@@ -36,6 +36,7 @@ int main(int argc, char* argv[])
 		sfd = connect_server(atoi(argv[1]));
 	}
 	if (data % 2 == 1) {
+		port = atoi(argv[2]);
 		sfd = connect_client(atoi(argv[2]), &k);
 		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
@@ -48,7 +49,7 @@ int main(int argc, char* argv[])
 				to_read(sfd);
 			}
 			else if (!strncmp(user_i, "w", 1)) {
-
+				to_write(sfd, port)
 			}
 		}
 
