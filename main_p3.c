@@ -49,7 +49,7 @@ int main(int argc, char* argv[])
 				to_read(sfd);
 			}
 			else if (!strncmp(user_i, "w", 1)) {
-				to_write(sfd, port)
+				to_write(sfd, port);
 			}
 		}
 
