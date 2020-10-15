@@ -68,7 +68,7 @@ void to_write(unsigned long k, int port)
 	}
 	else if (num < k) {
 		printf("lcuas\n");
-		
+		printf("\nCopying %s to address %p\n", user_o, pages[(int)num].mem_addr);
 		memcpy(all_page[(int)num].mem_addr, user_o, sizeof(user_o));
 		printf("jaf\n");
 		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
