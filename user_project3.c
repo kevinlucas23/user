@@ -190,7 +190,7 @@ int connect_client(int port)
 	}
 
 	printf("How many pages would you like to allocate? (greater than 0): ");
-	if (!fgets(buff, 100, stdin)) {
+	if (!fgets(buff, 20, stdin)) {
 		errExit("error getting input");
 	}
 
