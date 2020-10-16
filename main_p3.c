@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	}
 
-	//fault_region(&k, &handl, &thr);
+	fault_region(&k, &handl, &thr);
 	assign_addr_to_pages((uint64_t)k.mmap_addr);
 
 	for (;;) {
