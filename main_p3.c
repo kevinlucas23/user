@@ -4,25 +4,25 @@ struct mmap_info all_page[100]; // Max number of pages
 
 int main(int argc, char* argv[])
 {
-	int sfd = 0, data;
+	int out = 0, data;
 	struct mmap_info k;
 	void* handl;
 	pthread_t thr;
-	char user_input[40];
+	char user_in[40];
 	FILE* fptr;
 	if ((fptr = fopen("data.txt", "r")) == NULL) {
 		errExit("Error! opening file");
 		// Program exits if the file pointer returns NULL.
 	}
-	sfd = fscanf(fptr, "%d", &data);
+	out = fscanf(fptr, "%d", &data);
 	fclose(fptr);
 
 	if ((fptr = fopen("data.txt", "w")) == NULL) {
 		errExit("Error! opening file");
 		// Program exits if the file pointer returns NULL.
 	}
-	sfd = data + 1;
-	fprintf(fptr, "%d", sfd);
+	out = data + 1;
+	fprintf(fptr, "%d", out);
 	fclose(fptr);
 
 	if (argc != 3) {
@@ -35,10 +35,10 @@ int main(int argc, char* argv[])
 	printf("[*] Pairing...\n");
 
 	if (data % 2 == 0) {
-		sfd = connect_server(atoi(argv[1]), &k);
+		out = connect_server(atoi(argv[1]), &k);
 	}
 	if (data % 2 == 1) {
-		sfd = connect_client(atoi(argv[2]), &k);
+		out = connect_client(atoi(argv[2]), &k);
 		mmap(k.mmap_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	}
@@ -48,15 +48,15 @@ int main(int argc, char* argv[])
 
 	for (;;) {
 		printf("\nWhich command should I run? (r:read, w:write, or x:exit): ");
-		if (!fgets(user_input, 40, stdin))
+		if (!fgets(user_in, 40, stdin))
 			errExit("fgets error");
-		if (!strncmp(user_input, "r", 1)) {
+		if (!strncmp(user_in, "r", 1)) {
 			to_read();
 		}
-		else if (!strncmp(user_input, "w", 1)) {
+		else if (!strncmp(user_in, "w", 1)) {
 			to_write();
 		}
-		else if (!strncmp(user_input, "x", 1)) {
+		else if (!strncmp(user_in, "x", 1)) {
 			break;
 		}
 	}

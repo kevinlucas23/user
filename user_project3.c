@@ -13,14 +13,14 @@ void delay(int secs)
 
 void to_read()
 {
-	char user_input[20];
+	char user_in[20];
 	char* c;
 	unsigned long num, i = 0;
 
 	printf("For which page do you want to read? (0-%d, or -1 for all): ", ((int)num_pages - 1));
-	if (!fgets(user_input, 20, stdin))
+	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
-	num = strtoul(user_input, NULL, 0);
+	num = strtoul(user_in, NULL, 0);
 
 	if ((int)num == -1) {
 		 while (i < num_pages) {
@@ -47,26 +47,26 @@ void to_read()
 
 void to_write()
 {
-	char user_input[20] = { 0 }, user_output[40] = { 0 };
+	char user_in[20] = { 0 }, user_out[40] = { 0 };
 	unsigned long num, i = 0;
 
 	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)num_pages - 1));
-	if (!fgets(user_input, 20, stdin))
+	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
-	num = strtoul(user_input, NULL, 0);
+	num = strtoul(user_in, NULL, 0);
 
 	printf("What would you like to write?: ");
-	if (!fgets(user_output, 20, stdin))
+	if (!fgets(user_out, 20, stdin))
 		errExit("fgets error");
 	
 	if ((int)num == -1) {
 		while (i < num_pages) {
-			memcpy(all_page[(int)i].mmap_addr, user_output, strlen(user_output));
+			memcpy(all_page[(int)i].mmap_addr, user_out, strlen(user_out));
 			i++;
 		}
 	}
 	else if (num < num_pages) {
-		memcpy(all_page[(int)num].mmap_addr, user_output, strlen(user_output));
+		memcpy(all_page[(int)num].mmap_addr, user_out, strlen(user_out));
 	}
 	else {
 		printf("\nout of page range");
