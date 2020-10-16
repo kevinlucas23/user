@@ -40,11 +40,11 @@ void to_read()
 			printf(" [*] Page :\n");
 		}
 		else {
-			printf(" [*] Page %lu: \n%s\n", num, c);
+			printf(" [*] Page %lu: %s\n", num, c);
 		}
 	}
 	else {
-		printf("\nout of page range");
+		printf("out of page range\n");
 	}
 }
 
@@ -72,7 +72,7 @@ void to_write()
 		memcpy(all_page[(int)num].mmap_addr, user_out, strlen(user_out));
 	}
 	else {
-		printf("\nout of page range");
+		printf("out of page range\n");
 	}
 }
 
