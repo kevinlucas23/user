@@ -126,7 +126,7 @@ void* fault_handler_thread(void* arg)
 
 		if (ioctl(uffd, UFFDIO_COPY, &uffdio_copy) == -1)
 			errExit("ioctl-UFFDIO_COPY");
-		printf("\n [X] PAGEFAULT on address (%p) \n", msg.arg.pagefault.address);
+		printf("\n [X] PAGEFAULT on address (%p) \n", (void*)msg.arg.pagefault.address);
 	}
 }
 
