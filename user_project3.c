@@ -23,7 +23,7 @@ void to_read()
 	num = strtoul(user_in, NULL, 0);
 
 	if ((int)num == -1) {
-		 while (i < num_pages) {
+		 for(i = 0; i < num_pages; ++i){
 			c = (char*)all_page[(int)i].mmap_addr;
 			if (c == NULL) {
 				printf(" [*] Page %lu: \n", i);
@@ -32,7 +32,6 @@ void to_read()
 				printf(" [*] Page %lu: \n%s\n", i, c);
 			}
 			printf("%lu, pages n %d\n", i, (int)num_pages);
-			i++;
 		 }
 	}
 	else if(num < num_pages){
