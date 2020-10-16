@@ -10,6 +10,12 @@ int main(int argc, char* argv[])
 	pthread_t thr;
 	char user_in[40];
 	FILE* fptr;
+
+	if (argc != 3) {
+		fprintf(stderr, "Usage: %s port remote_port\n", argv[0]);
+		exit(EXIT_FAILURE);
+	}
+
 	if ((fptr = fopen("data.txt", "r")) == NULL) {
 		errExit("Error! opening file");
 		// Program exits if the file pointer returns NULL.
@@ -25,10 +31,6 @@ int main(int argc, char* argv[])
 	fprintf(fptr, "%d", out);
 	fclose(fptr);
 
-	if (argc != 3) {
-		fprintf(stderr, "Usage: %s port remote_port\n", argv[0]);
-		exit(EXIT_FAILURE);
-	}
 
 	all_pages();
 
