@@ -57,18 +57,20 @@ void to_write()
 	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
 	num = strtoul(user_in, NULL, 0);
-
-	printf("What would you like to write?: ");
-	if (!fgets(user_out, 20, stdin))
-		errExit("fgets error");
 	
 	if ((int)num == -1) {
+		printf("What would you like to write?: ");
+		if (!fgets(user_out, 20, stdin))
+			errExit("fgets error");
 		while (i < num_pages) {
 			memcpy(all_page[(int)i].mmap_addr, user_out, strlen(user_out));
 			i++;
 		}
 	}
 	else if (num < num_pages) {
+		printf("What would you like to write?: ");
+		if (!fgets(user_out, 20, stdin))
+			errExit("fgets error");
 		memcpy(all_page[(int)num].mmap_addr, user_out, strlen(user_out));
 	}
 	else {
