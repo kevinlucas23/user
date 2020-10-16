@@ -31,6 +31,7 @@ void to_read()
 			else {
 				printf(" [*] Page %lu: \n%s\n", i, c);
 			}
+			printf("pages n %d", (int)num_pages);
 			i++;
 		 }
 	}
