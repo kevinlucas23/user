@@ -1,15 +1,14 @@
 #include "user_project3.h"
 
-//extern struct info_mem kev;
-struct map_info all_page[100];
+struct mmap_info all_page[100]; // Max number of pages
 
 int main(int argc, char* argv[])
 {
 	int sfd = 0, data;
-	struct map_info k;
+	struct mmap_info k;
 	void* handl;
 	pthread_t thr;
-	char user_i[40];
+	char user_input[40];
 	FILE* fptr;
 	if ((fptr = fopen("data.txt", "r")) == NULL) {
 		errExit("Error! opening file");
@@ -40,26 +39,25 @@ int main(int argc, char* argv[])
 	}
 	if (data % 2 == 1) {
 		sfd = connect_client(atoi(argv[2]), &k);
-		mmap(k.mem_addr, k.length, PROT_READ | PROT_WRITE,
+		mmap(k.mmap_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	}
 
 	fault_region(&k, &handl, &thr);
-	equate_((uint64_t)k.mem_addr);
+	assign_addr_to_pages((uint64_t)k.mmap_addr);
 
 	for (;;) {
 		printf("\nWhich command should I run? (r:read, w:write, or x:exit): ");
-		if (!fgets(user_i, 40, stdin))
+		if (!fgets(user_input, 40, stdin))
 			errExit("fgets error");
-		if (!strncmp(user_i, "r", 1)) {
+		if (!strncmp(user_input, "r", 1)) {
 			to_read();
 		}
-		else if (!strncmp(user_i, "w", 1)) {
-			to_write(sfd);
+		else if (!strncmp(user_input, "w", 1)) {
+			to_write();
 		}
-		else if (!strncmp(user_i, "x", 1)) {
-			printf("Exiting\n");
-			return 0;
+		else if (!strncmp(user_input, "x", 1)) {
+			break;
 		}
 	}
 
