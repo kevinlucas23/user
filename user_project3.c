@@ -43,6 +43,9 @@ void to_read()
 			printf(" [*] Page %lu: \n%s\n", num, c);
 		}
 	}
+	else {
+		printf("\nout of page range");
+	}
 }
 
 void to_write()
