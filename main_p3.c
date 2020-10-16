@@ -49,7 +49,6 @@ int main(int argc, char* argv[])
 	assign_addr_to_pages((uint64_t)k.mmap_addr);
 
 	for (;;) {
-		fault_region(&k, &handl, &thr);
 		printf("\nWhich command should I run? (r:read, w:write, or x:exit): ");
 		if (!fgets(user_in, 40, stdin))
 			errExit("fgets error");
