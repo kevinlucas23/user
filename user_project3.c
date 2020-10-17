@@ -24,13 +24,13 @@ void to_read()
 	if ((int)num == -1) {
 		 for(i = 0; i < num_pages; ++i){
 			char* c = (char*)all_page[(int)i].mmap_addr;
+			printf("%lu, pages n %d\n", i, (int)num_pages);
 			if (c == NULL) {
 				printf(" [*] Page %lu: \n", i);
 			}
 			else {
 				printf(" [*] Page %lu: \n%s\n", i, c);
 			}
-			printf("%lu, pages n %d\n", i, (int)num_pages);
 		 }
 	}
 	else if(num < num_pages){
