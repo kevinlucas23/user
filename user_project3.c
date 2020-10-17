@@ -64,12 +64,12 @@ void to_write()
 
 	if ((int)num == -1) {
 		while (i < num_pages) {
-			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
+			memcpy(all_page[(int)i].mmap_addr, user_o, strlen(user_o));
 			i++;
 		}
 	}
 	else if (num < num_pages) {
-		memcpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
+		memcpy(all_page[(int)num].mmap_addr, user_o, strlen(user_o));
 	}
 	else {
 		printf("out of page range\n");
