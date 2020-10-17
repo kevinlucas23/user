@@ -30,36 +30,36 @@
 
 struct user_args {
 	long uffd;
-	uint64_t u_addr;
+	uint64_t pre_addr;
 };
 
-struct mmap_info {
+struct map_info {
 	uint64_t length;
-	void* mmap_addr;
+	void* mem_addr;
 };
 
-struct data_to {
+struct info_mem {
 	uint64_t addr;
 	uint64_t size;
 };
 
-// For faulting
+struct socket_args {
+	uint64_t length;
+	uint64_t mem_address;
+	int soc;
+};
+
 void* fault_handler_thread(void* arg);
-long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr);
+long fault_region(struct map_info* k, void** start_handle, pthread_t* thr);
 
-// For my pages
-void all_pages();
+void* socket_handler_thread(void* arg);
 
-// Connection between server and client.
-int connect_server(int port, struct mmap_info* k);
-int connect_client(int port, struct mmap_info* k);
+static void all_pages();
 
-// To keep the connection active
+int connect_server(int port);
+int connect_client(int port, struct map_info* k);
 void delay(int secs);
-
-// To read and write given the commands
 void to_read();
-void to_write();
-void assign_addr_to_pages(uint64_t addr, int pa);
-
+void to_write(int port);
+void equate_(uint64_t addr);
 #endif /* end of include guard: __USER_PROJECT3_H_ */
