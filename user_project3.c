@@ -84,10 +84,10 @@ void assign_addr_to_pages(uint64_t addr, int pa)
 	int i = 0;
 	uint64_t page = addr;
 	int size_p = sysconf(_SC_PAGE_SIZE);
-	char* user_out = NULL;
+	char user_out[20] = {}
 	for (i = 0; i < pa; ++i, page += size_p) {
 		all_page[i].mmap_addr = (void*)page;
-		memcpy(all_page[(int)i].mmap_addr, *user_out, strlen(*user_out));
+		memcpy(all_page[(int)i].mmap_addr, user_out, strlen(user_out));
 		printf("initiliazing %d, with address %p\n", i, (void*)page);
 	}
 }
