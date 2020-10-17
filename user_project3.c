@@ -50,7 +50,7 @@ void to_read()
 
 void to_write()
 {
-	char user_in[20] = { 0 }, user_out[40] = { 0 };
+	char user_in[20] = { 0 }, user_out[60];
 	unsigned long num, i = 0;
 
 	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)num_pages - 1));
@@ -58,7 +58,7 @@ void to_write()
 		errExit("fgets error");
 	num = strtoul(user_in, NULL, 0);
 	printf("What would you like to write?: ");
-	if (!fgets(user_out, 20, stdin))
+	if (!fgets(user_out, 60, stdin))
 		errExit("fgets error");
 	if ((int)num == -1) {
 		
