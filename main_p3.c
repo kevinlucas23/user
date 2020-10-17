@@ -1,7 +1,7 @@
 #include "user_project3.h"
 
 struct mmap_info all_page[100]; // Max number of pages
-
+extern unsigned long num_pages;
 int main(int argc, char* argv[])
 {
 	int out = 0, data;
@@ -46,7 +46,7 @@ int main(int argc, char* argv[])
 	}
 
 	fault_region(&k, &handl, &thr);
-	assign_addr_to_pages((uint64_t)k.mmap_addr);
+	assign_addr_to_pages((uint64_t)k.mmap_addr, num_pages);
 
 	for (;;) {
 		printf("\nWhich command should I run? (r:read, w:write, or x:exit): ");

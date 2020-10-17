@@ -60,6 +60,6 @@ void delay(int secs);
 // To read and write given the commands
 void to_read();
 void to_write();
-void assign_addr_to_pages(uint64_t addr);
+void assign_addr_to_pages(uint64_t addr, int pa);
 
 #endif /* end of include guard: __USER_PROJECT3_H_ */

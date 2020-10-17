@@ -37,7 +37,7 @@ void to_read()
 	else if(num < num_pages){
 		c = (char*)all_page[(int)num].mmap_addr;
 		if (c == NULL) {
-			printf(" [*] Page :\n");
+			printf(" [*] Page %lu: \n", num);
 		}
 		else {
 			printf(" [*] Page %lu: %s\n", num, c);
@@ -78,12 +78,12 @@ void to_write()
 	}
 }
 
-void assign_addr_to_pages(uint64_t addr)
+void assign_addr_to_pages(uint64_t addr, int pa)
 {
 	int i = 0;
 	uint64_t page = addr;
 	int size_p = sysconf(_SC_PAGE_SIZE);
-	for (i = 0; i < 100; ++i, page += size_p) {
+	for (i = 0; i < pa; ++i, page += size_p) {
 		all_page[i].mmap_addr = (void*)page;
 	}
 }
