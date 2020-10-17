@@ -85,7 +85,7 @@ void assign_addr_to_pages(uint64_t addr, int pa)
 	int size_p = sysconf(_SC_PAGE_SIZE);
 	for (i = 0; i < pa; ++i, page += size_p) {
 		all_page[i].mmap_addr = (void*)page;
-		printf("initiliazing %d\n", i);
+		printf("initiliazing %d, with address %p\n", i, (void*)page);
 	}
 }
 
