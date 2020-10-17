@@ -23,8 +23,7 @@ void to_read()
 
 	if ((int)num == -1) {
 		for (;;) {
-			 printf("%lu, pages n %d\n", i, (int)num_pages);
-			 if (i == num_pages)
+			if (i == num_pages)
 				 break;
 			c = (char*)all_page[(int)i].mmap_addr;
 			if (c == NULL) {
