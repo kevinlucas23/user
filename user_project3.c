@@ -14,7 +14,6 @@ void delay(int secs)
 void to_read()
 {
 	char user_in[20];
-	char* c;
 	unsigned long num, i = 0;
 
 	printf("For which page do you want to read? (0-%d, or -1 for all): ", ((int)num_pages - 1));
@@ -24,7 +23,7 @@ void to_read()
 
 	if ((int)num == -1) {
 		 for(i = 0; i < num_pages; ++i){
-			c = (char*)all_page[(int)i].mmap_addr;
+			char* c = (char*)all_page[(int)i].mmap_addr;
 			if (c == NULL) {
 				printf(" [*] Page %lu: \n", i);
 			}
