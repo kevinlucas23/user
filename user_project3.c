@@ -1,7 +1,8 @@
 #include "user_project3.h"
 
-unsigned long num_pages;
-extern struct map_info all_page[];
+unsigned long num_pages; // Stores the number of pages given from the user.
+extern struct mmap_info all_page[];
+
 void delay(int secs)
 {
 	int milli_seconds = 1000 * secs;
@@ -12,81 +13,78 @@ void delay(int secs)
 
 void to_read()
 {
-	char user_i[20];
-	char* c;
+	char user_in[20];
 	unsigned long num, i = 0;
+
 	printf("For which page do you want to read? (0-%d, or -1 for all): ", ((int)num_pages - 1));
-	if (!fgets(user_i, 20, stdin))
+	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
-	num = strtoul(user_i, NULL, 0);
+	num = strtoul(user_in, NULL, 0);
+
 	if ((int)num == -1) {
-		 while (i < num_pages) {
-			c = (char*)all_page[(int)i].mem_addr;
+		 for(i = 0; i < num_pages; ++i){
+			char* c = (char*)all_page[(int)i].mmap_addr;
 			if (c == NULL) {
-				printf(" [*] Page %lu:\n", i);
+				printf(" [*] Page %lu: \n", i);
 			}
 			else {
-				printf(" [*] Page %lu: %s\n", i, c);
+				printf(" [*] Page %lu: \n%s\n", i, c);
 			}
-			i++;
+			printf("%lu, pages n %d\n", i, (int)num_pages);
 		 }
 	}
 	else if(num < num_pages){
-		c = (char*)all_page[(int)num].mem_addr;
+		char* c = (char*)all_page[(int)num].mmap_addr;
 		if (c == NULL) {
-			printf(" [*] Page :\n");
+			printf(" [*] Page %lu: \n", num);
 		}
 		else {
 			printf(" [*] Page %lu: %s\n", num, c);
 		}
 	}
+	else {
+		printf("out of page range\n");
+	}
 }
 
-void to_write(int port)
+void to_write()
 {
-	char user_i[20] = { 0 }, user_o[40] = { 0 };
+	char user_in[20] = { 0 }, user_out[40] = { 0 };
 	unsigned long num, i = 0;
-	struct info_mem kev;
 
 	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)num_pages - 1));
-	if (!fgets(user_i, 20, stdin))
+	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
-	num = strtoul(user_i, NULL, 0);
-	if (num >= num_pages) {
-		printf("\nout of page range");
-		return;
-	}
-
-	printf("What would you like to write?: ");
-	if (!fgets(user_o, 20, stdin))
-		errExit("fgets error");
+	num = strtoul(user_in, NULL, 0);
 	
 	if ((int)num == -1) {
+		printf("What would you like to write?: ");
+		if (!fgets(user_out, 20, stdin))
+			errExit("fgets error");
 		while (i < num_pages) {
-			memcpy(all_page[(int)i].mem_addr, user_o, strlen(user_o));
-			kev.addr = (uint64_t)all_page[(int)i].mem_addr;
+			memcpy(all_page[(int)i].mmap_addr, user_out, strlen(user_out));
 			i++;
 		}
 	}
 	else if (num < num_pages) {
-		memcpy(all_page[(int)num].mem_addr, user_o, strlen(user_o));
-		kev.addr = (uint64_t)all_page[(int)num].mem_addr;
-		kev.size = (uint64_t)num;
+		printf("What would you like to write?: ");
+		if (!fgets(user_out, 20, stdin))
+			errExit("fgets error");
+		memcpy(all_page[(int)num].mmap_addr, user_out, strlen(user_out));
+	}
+	else {
+		printf("out of page range\n");
 	}
 }
 
-void equate_(uint64_t addr)
+void assign_addr_to_pages(uint64_t addr, int pa)
 {
 	int i = 0;
 	uint64_t page = addr;
 	int size_p = sysconf(_SC_PAGE_SIZE);
-<<<<<<< HEAD
-	for (i = 0; i < 100; ++i, page += size_p) {
-		all_page[i].mem_addr = (void*)page;
-=======
 	for (i = 0; i < pa; ++i, page += size_p) {
 		all_page[i].mmap_addr = (void*)page;
->>>>>>> parent of 576e339... Part 3 done
+		printf("initiliazing %d\n", i);
 	}
 }
 
@@ -97,8 +95,8 @@ void* fault_handler_thread(void* arg)
 	struct user_args* kev = (struct user_args*)arg;
 	struct uffdio_copy uffdio_copy;
 	ssize_t nread;
-	//static int fault_cnt = 0;
-	char* page = (char*)kev->pre_addr;
+
+	char* page = (char*)kev->u_addr;
 	uffd = kev->uffd;
 	
 	for (;;) {
@@ -133,11 +131,11 @@ void* fault_handler_thread(void* arg)
 
 		if (ioctl(uffd, UFFDIO_COPY, &uffdio_copy) == -1)
 			errExit("ioctl-UFFDIO_COPY");
-		printf("\n [X] PAGEFAULT\n");
+		printf("\n [X] PAGEFAULT on address (%p) \n", (void*)msg.arg.pagefault.address);
 	}
 }
 
-long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
+long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 {
 	long uffd;          /* userfaultfd file descriptor */
 	struct uffdio_api uffdio_api;
@@ -152,7 +150,7 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 	memset(*start_handle, 0, k->length);
 
 	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-	kev->pre_addr = (uint64_t)*start_handle;
+	kev->u_addr = (uint64_t)*start_handle;
 	kev->uffd = uffd;
 	if (uffd == -1) {
 		errExit("userfaultfd");
@@ -163,7 +161,7 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1)
 		errExit("ioctl-UFFDIO_API");
 
-	uffdio_register.range.start = (unsigned long)k->mem_addr;
+	uffdio_register.range.start = (unsigned long)k->mmap_addr;
 	uffdio_register.range.len = k->length;
 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
@@ -177,35 +175,20 @@ long fault_region(struct map_info* k, void** start_handle, pthread_t* thr)
 	return uffd;
 }
 
-void* socket_handler_thread(void* arg)
-{
-	/*struct socket_args* sargs = arg;
-	int s;
-
-	if(!sargs)
-	  errExit("Socket Null");
-
-	pthread_cleanup_push(socket_handler_thread, &sargs->soc);
-
-	for(;;){
-	}*/
-	return (void*)0;
-}
-
 void all_pages()
 {
 	int j;
 	for (j = 0; j < 100; ++j) {
-		all_page[j].mem_addr = NULL;
+		all_page[j].mmap_addr = NULL;
 	}
 }
 
-int connect_server(int port, struct map_info* k)
+int connect_server(int port, struct mmap_info* k)
 {
 	int sockfd, connfd, length, reaa;
 	struct sockaddr_in saddr;
 	char buff[20];
-	struct info_mem kev;
+	struct data_to kev;
 	void* map_t;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -246,7 +229,7 @@ int connect_server(int port, struct map_info* k)
 	printf("mmap addr: %p, and length: %d\n", map_t, length);
 	kev.addr = (uint64_t)map_t;
 	kev.size = length;
-	k->mem_addr = (void*)kev.addr;
+	k->mmap_addr = (void*)kev.addr;
 	k->length = kev.size;
 	reaa = write(connfd, &kev, sizeof(kev));
 	if (reaa < 0)
@@ -255,18 +238,18 @@ int connect_server(int port, struct map_info* k)
 	return connfd;
 }
 
-int connect_client(int port, struct map_info* k)
+int connect_client(int port, struct mmap_info* k)
 {
 	int sockfd, reaa;
 	struct sockaddr_in saddr;
-	struct info_mem kev;
+	struct data_to kev;
 	char buff[20];
 
 	sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (sockfd == -1) {
 		errExit("Socket client creation failed....\n");
 	}
-	//printf("Connecting to: %d\n", port);
+
 	memset(&saddr, 0, sizeof(saddr));
 	saddr.sin_family = AF_INET;
 	saddr.sin_addr.s_addr = inet_addr("127.0.0.1");
@@ -294,7 +277,7 @@ int connect_client(int port, struct map_info* k)
 		errExit("Can't read");
 
 	printf("Request received addr: 0x%lx, and length: %lu\n", kev.addr, kev.size);
-	k->mem_addr = (void*)kev.addr;
+	k->mmap_addr = (void*)kev.addr;
 	k->length = kev.size;
 	close(sockfd);
 	return sockfd;
