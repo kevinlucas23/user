@@ -1,7 +1,7 @@
 #include "user_project3.h"
 
 unsigned long num_pages; // Stores the number of pages given from the user.
-struct mmap_info all_page[100]; // Max number of pages
+extern struct mmap_info all_page[];
 
 void delay(int secs)
 {
@@ -25,7 +25,7 @@ void to_read()
 		 for(i = 0x0; i < num_pages; ++i){
 			 printf("%lu, pages n %d\n", i, (int)num_pages);
 
-			char* c = (char*)all_page[i].mmap_addr;
+			char* c = (char*)all_page[(int)i].mmap_addr;
 			if (c == NULL) {
 				printf(" [*] Page %lu: \n", i);
 			}
@@ -36,7 +36,7 @@ void to_read()
 		 }
 	}
 	else if(num < num_pages){
-		char* c = (char*)all_page[num].mmap_addr;
+		char* c = (char*)all_page[(int)num].mmap_addr;
 		if (c == NULL) {
 			printf(" [*] Page %lu: \n", num);
 		}
@@ -67,12 +67,12 @@ void to_write()
 	if ((int)num == -1) {
 		
 		while (i < num_pages) {
-			memcpy(all_page[i].mmap_addr, user_out, strlen(user_out));
+			memcpy(all_page[(int)i].mmap_addr, user_out, strlen(user_out));
 			i++;
 		}
 	}
 	else if (num < num_pages) {
-		memcpy(all_page[num].mmap_addr, user_out, strlen(user_out));
+		memcpy(all_page[(int)num].mmap_addr, user_out, strlen(user_out));
 	}
 	else {
 		printf("out of page range\n");
@@ -81,12 +81,12 @@ void to_write()
 
 void assign_addr_to_pages(uint64_t addr, int pa)
 {
-	unsigned long i = 0;
+	int i = 0;
 	uint64_t page = addr;
 	int size_p = sysconf(_SC_PAGE_SIZE);
 	for (i = 0; i < pa; ++i, page += size_p) {
 		all_page[i].mmap_addr = (void*)page;
-		printf("initiliazing %d, with address %p\n", (int)i, (void*)page);
+		printf("initiliazing %d, with address %p\n", i, (void*)page);
 	}
 }
 
@@ -179,7 +179,7 @@ long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 
 void all_pages()
 {
-	unsigned long j;
+	int j;
 	for (j = 0; j < num_pages; ++j) {
 		all_page[j].mmap_addr = NULL;
 	}
