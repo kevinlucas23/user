@@ -22,18 +22,15 @@ void to_read()
 	num = strtoul(user_in, NULL, 0);
 
 	if ((int)num == -1) {
-		for (;;) {
-			if (i == num_pages)
-				 break;
+		for (i = 0;i < num_pages; ++i) {
 			c = (char*)all_page[(int)i].mmap_addr;
-			if (c == NULL) {
+			char k = *c;
+			if (k == (int)0) {
 				printf(" [*] Page %lu: \n", i);
 			}
 			else {
-				printf(" [*] Page %lu: %s\n", i, c);
+				printf(" [*] Page %lu: %s\n", i, k);
 			}
-			c = NULL;
-			i++;
 		 }
 	}
 	else if(num < num_pages){
@@ -62,9 +59,6 @@ void to_write()
 	printf("What would you like to write?: ");
 	if (!fgets(user_out, 20, stdin))
 		errExit("fgets error");
-	printf("What would you like to write?: ");
-	if (!fgets(user_out, 20, stdin))
-		errExit("fgets error");
 	if ((int)num == -1) {
 		
 		while (i < num_pages) {
@@ -87,7 +81,7 @@ void assign_addr_to_pages(uint64_t addr, int pa)
 	int size_p = sysconf(_SC_PAGE_SIZE);
 	for (i = 0; i < pa; ++i, page += size_p) {
 		all_page[i].mmap_addr = (void*)page;
-		printf("initiliazing %d, with address %p\n", i, (void*)page);
+		//printf("initiliazing %d, with address %p\n", i, (void*)page);
 	}
 }
 
