@@ -80,8 +80,13 @@ void equate_(uint64_t addr)
 	int i = 0;
 	uint64_t page = addr;
 	int size_p = sysconf(_SC_PAGE_SIZE);
+<<<<<<< HEAD
 	for (i = 0; i < 100; ++i, page += size_p) {
 		all_page[i].mem_addr = (void*)page;
+=======
+	for (i = 0; i < pa; ++i, page += size_p) {
+		all_page[i].mmap_addr = (void*)page;
+>>>>>>> parent of 576e339... Part 3 done
 	}
 }
 
