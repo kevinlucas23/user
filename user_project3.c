@@ -29,7 +29,7 @@ void to_read()
 				printf(" [*] Page %lu: \n", i);
 			}
 			else {
-				printf(" [*] Page %lu: %s\n", i, &k);
+				printf(" [*] Page %lu: %s\n", i, c);
 			}
 		 }
 	}
@@ -40,7 +40,7 @@ void to_read()
 			printf(" [*] Page %lu: \n", num);
 		}
 		else {
-			printf(" [*] Page %lu: %s\n", num, &k);
+			printf(" [*] Page %lu: %s\n", num, c);
 		}
 	}
 	else {
