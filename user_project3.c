@@ -22,7 +22,7 @@ void to_read()
 	num = strtoul(user_in, NULL, 0);
 
 	if ((int)num == -1) {
-		 for(i = 0; i < num_pages; i += 1024){
+		 for(i = 0; i < num_pages; ++i){
 			 printf("%lu, pages n %d\n", i, (int)num_pages);
 
 			char* c = (char*)all_page[(int)i].mmap_addr;
@@ -32,6 +32,7 @@ void to_read()
 			else {
 				printf(" [*] Page %lu: \n%s\n", i, c);
 			}
+			c = NULL;
 		 }
 	}
 	else if(num < num_pages){
@@ -57,20 +58,20 @@ void to_write()
 	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
 	num = strtoul(user_in, NULL, 0);
-	
+	printf("What would you like to write?: ");
+	if (!fgets(user_out, 20, stdin))
+		errExit("fgets error");
+	printf("What would you like to write?: ");
+	if (!fgets(user_out, 20, stdin))
+		errExit("fgets error");
 	if ((int)num == -1) {
-		printf("What would you like to write?: ");
-		if (!fgets(user_out, 20, stdin))
-			errExit("fgets error");
+		
 		while (i < num_pages) {
 			memcpy(all_page[(int)i].mmap_addr, user_out, strlen(user_out));
 			i++;
 		}
 	}
 	else if (num < num_pages) {
-		printf("What would you like to write?: ");
-		if (!fgets(user_out, 20, stdin))
-			errExit("fgets error");
 		memcpy(all_page[(int)num].mmap_addr, user_out, strlen(user_out));
 	}
 	else {
