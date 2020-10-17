@@ -34,7 +34,7 @@ void to_read()
 		 }
 	}
 	else if(num < num_pages){
-		c = (char*)all_page[(int)num].mmap_addr;
+		char* c = (char*)all_page[(int)num].mmap_addr;
 		if (c == NULL) {
 			printf(" [*] Page %lu: \n", num);
 		}
