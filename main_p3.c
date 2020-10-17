@@ -1,6 +1,5 @@
 #include "user_project3.h"
 
-struct mmap_info all_page[100]; // Max number of pages
 extern unsigned long num_pages;
 int main(int argc, char* argv[])
 {
@@ -31,9 +30,6 @@ int main(int argc, char* argv[])
 	fprintf(fptr, "%d", out);
 	fclose(fptr);
 
-
-	all_pages();
-
 	printf("[*] Pairing...\n");
 
 	if (data % 2 == 0) {
@@ -44,6 +40,8 @@ int main(int argc, char* argv[])
 		mmap(k.mmap_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
 	}
+
+	all_pages();
 
 	fault_region(&k, &handl, &thr);
 	assign_addr_to_pages((uint64_t)k.mmap_addr, num_pages);
