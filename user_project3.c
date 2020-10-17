@@ -22,7 +22,7 @@ void to_read()
 	num = strtoul(user_in, NULL, 0);
 
 	if ((int)num == -1) {
-		 for(i = 0; i < num_pages; ++i){
+		 for(i = 0x0; i < num_pages; ++i){
 			 printf("%lu, pages n %d\n", i, (int)num_pages);
 
 			char* c = (char*)all_page[(int)i].mmap_addr;
