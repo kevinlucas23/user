@@ -44,7 +44,7 @@ void to_read()
 		}
 	}
 	else {
-		printf("out of page range\n");
+		printf("Out of page range\n");
 	}
 }
 
@@ -72,7 +72,7 @@ void to_write()
 		memcpy(all_page[(int)num].mmap_addr, user_o, strlen(user_o));
 	}
 	else {
-		printf("out of page range\n");
+		printf("Out of page range\n");
 	}
 }
 
@@ -83,7 +83,6 @@ void assign_addr_to_pages(uint64_t addr, int pa)
 	int size_p = sysconf(_SC_PAGE_SIZE);
 	for (i = 0; i < pa; ++i, page += size_p) {
 		all_page[i].mmap_addr = (void*)page;
-		//printf("initiliazing %d, with address %p\n", i, (void*)page);
 	}
 }
 
@@ -130,7 +129,7 @@ void* fault_handler_thread(void* arg)
 
 		if (ioctl(uffd, UFFDIO_COPY, &uffdio_copy) == -1)
 			errExit("ioctl-UFFDIO_COPY");
-		printf("\n [X] PAGEFAULT on address (%p) \n", (void*)msg.arg.pagefault.address);
+		printf(" [X] PAGEFAULT on address (%p).\n", (void*)msg.arg.pagefault.address);
 	}
 }
 
@@ -213,7 +212,7 @@ int connect_server(int port, struct mmap_info* k)
 		errExit("Socket server accept failed..\n");
 	}
 
-	printf("[*] Paired!\n");
+	printf(" [*] Paired!\n");
 
 	reaa = read(connfd, &buff, sizeof(buff));
 	if (reaa < 0)
@@ -225,7 +224,7 @@ int connect_server(int port, struct mmap_info* k)
 	if (map_t == MAP_FAILED)
 		errExit("mmap");
 
-	printf("mmap addr: %p, and length: %d\n", map_t, length);
+	printf("mmap addr: %p, and length: %d.\n", map_t, length);
 	kev.addr = (uint64_t)map_t;
 	kev.size = length;
 	k->mmap_addr = (void*)kev.addr;
@@ -258,7 +257,7 @@ int connect_client(int port, struct mmap_info* k)
 		if (connect(sockfd, (struct sockaddr*)&saddr, sizeof(saddr)) == 0) {
 			break;
 		}
-		printf("[-] Connection Failed\n\n");
+		printf(" [-] Connection Failed\n\n");
 		delay(1500);
 	}
 
@@ -275,7 +274,7 @@ int connect_client(int port, struct mmap_info* k)
 	if (reaa < 0)
 		errExit("Can't read");
 
-	printf("Request received addr: 0x%lx, and length: %lu\n", kev.addr, kev.size);
+	printf("Request received addr: 0x%lx, and length: %lu.\n", kev.addr, kev.size);
 	k->mmap_addr = (void*)kev.addr;
 	k->length = kev.size;
 	close(sockfd);

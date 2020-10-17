@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
 	fprintf(fptr, "%d", out);
 	fclose(fptr);
 
-	printf("[*] Pairing...\n");
+	printf(" [*] Pairing...\n");
 
 	if (data % 2 == 0) {
 		out = connect_server(atoi(argv[1]), &k);
