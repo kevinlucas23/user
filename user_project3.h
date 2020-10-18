@@ -33,11 +33,6 @@ struct user_args {
 	uint64_t u_addr;
 };
 
-struct sock_args {
-	int soc;
-	data_to info;
-};
-
 struct mmap_info {
 	uint64_t length;
 	void* mmap_addr;
@@ -46,6 +41,11 @@ struct mmap_info {
 struct data_to {
 	uint64_t addr;
 	uint64_t size;
+};
+
+struct sock_args {
+	int soc;
+	data_to info;
 };
 
 // For faulting
