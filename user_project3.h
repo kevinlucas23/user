@@ -45,7 +45,7 @@ struct data_to {
 
 struct sock_args {
 	int soc;
-	data_to info;
+	struct data_to info;
 };
 
 // For faulting
