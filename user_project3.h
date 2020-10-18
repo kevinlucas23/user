@@ -33,6 +33,11 @@ struct user_args {
 	uint64_t u_addr;
 };
 
+struct sock_args {
+	int soc;
+	data_to info;
+};
+
 struct mmap_info {
 	uint64_t length;
 	void* mmap_addr;
@@ -46,6 +51,9 @@ struct data_to {
 // For faulting
 void* fault_handler_thread(void* arg);
 long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr);
+
+// For socket thread
+void* thread_socket(void* arg);
 
 // For my pages
 void all_pages();

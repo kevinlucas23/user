@@ -133,6 +133,10 @@ void* fault_handler_thread(void* arg)
 	}
 }
 
+void* thread_socket(void* arg) {
+	struct sock_args* socket = arg;
+}
+
 long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 {
 	long uffd;          /* userfaultfd file descriptor */
