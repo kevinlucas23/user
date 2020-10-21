@@ -81,6 +81,6 @@ void delay(int secs);
 void to_read();
 void to_write();
 void to_msi();
-void assign_addr_to_pages(uint64_t addr, uint64_t here, int pa);
+void assign_addr_to_pages(uint64_t addr, int pa);
 
 #endif /* end of include guard: __USER_PROJECT3_H_ */
