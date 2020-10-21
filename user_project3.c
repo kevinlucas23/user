@@ -222,6 +222,8 @@ void all_pages()
 	int j;
 	for (j = 0; j < num_pages; ++j) {
 		all_page[j].mmap_addr = NULL;
+		all_page[j].protocol = invalidate;
+		pthread_mutex_init(&all_page[j].mutex, NULL);
 	}
 }
 

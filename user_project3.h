@@ -29,9 +29,9 @@
 	} while (0)
 
 enum MSI_I {
-	I = 0,
-	M,
-	S
+	invalidate = 0,
+	modified,
+	shared
 };
 
 struct msi_info
