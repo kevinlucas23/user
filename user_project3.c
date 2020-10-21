@@ -1,7 +1,7 @@
 #include "user_project3.h"
 
 unsigned long num_pages; // Stores the number of pages given from the user.
-extern struct mmap_info all_page[];
+extern struct msi_info all_page[];
 
 void delay(int secs)
 {

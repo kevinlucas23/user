@@ -1,7 +1,8 @@
 #include "user_project3.h"
 
-struct mmap_info all_page[100]; // Max number of pages
+struct msi_info all_page[100]; // Max number of pages
 extern unsigned long num_pages;
+
 int main(int argc, char* argv[])
 {
 	int out = 0, data;
