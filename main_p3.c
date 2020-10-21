@@ -60,7 +60,7 @@ int main(int argc, char* argv[])
 		else if (!strncmp(user_in, "x", 1)) {
 			break;
 		}
-		else if ((!strncmp(user_in, "v", 1)) {
+		else if ((!strncmp(user_in, "v", 1))) {
 			to_msi();
 		}
 	}
