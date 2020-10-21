@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
 	all_pages();
 
 	fault_region(&k, &handl, &thr);
-	assign_addr_to_pages((uint64_t)k.mmap_addr, num_pages);
+	assign_addr_to_pages((uint64_t)k.mmap_addr, (uint64_t)handl, num_pages);
 
 	for (;;) {
 		printf("\nWhich command should I run? (r:read, w:write, v:view msi list, or x:exit): ");

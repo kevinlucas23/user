@@ -28,6 +28,18 @@
 #define errExit(msg)    do { perror(msg); exit(EXIT_FAILURE);	\
 	} while (0)
 
+enum MSI_I {
+	I = 0,
+	M,
+	S
+};
+
+struct msi_info
+{
+	void* mmap_addr;
+	enum MSI_I proto;
+};
+
 struct user_args {
 	long uffd;
 	uint64_t u_addr;
@@ -69,6 +81,6 @@ void delay(int secs);
 void to_read();
 void to_write();
 void to_msi();
-void assign_addr_to_pages(uint64_t addr, int pa);
+void assign_addr_to_pages(uint64_t addr, uint64_t here, int pa);
 
 #endif /* end of include guard: __USER_PROJECT3_H_ */

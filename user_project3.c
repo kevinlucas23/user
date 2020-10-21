@@ -114,7 +114,7 @@ void to_msi() {
 	}
 }
 
-void assign_addr_to_pages(uint64_t addr, int pa)
+void assign_addr_to_pages(uint64_t addr, uint64_t here, int pa)
 {
 	int i = 0;
 	uint64_t page = addr;
