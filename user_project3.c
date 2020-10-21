@@ -76,6 +76,44 @@ void to_write()
 	}
 }
 
+void to_msi() {
+	char user_in[20];
+	unsigned long num, i = 0;
+	char* c;
+	printf("For which page would you view the status of? (0-%d, or -1 for all): ", ((int)num_pages - 1));
+	if (!fgets(user_in, 20, stdin))
+		errExit("fgets error");
+	num = strtoul(user_in, NULL, 0);
+
+	if ((int)num == -1) {
+		for (i = 0; i < num_pages; ++i) {
+			/*c = (char*)all_page[(int)i].mmap_addr;
+			char k = *c;
+			if (k == (int)0) {
+				printf(" [*] Page %lu: \n", i);
+			}
+			else {
+				printf(" [*] Page %lu: %s\n", i, c);
+			}*/
+			printf("MSI in all\n");
+		}
+	}
+	else if (num < num_pages) {
+		/*c = (char*)all_page[(int)num].mmap_addr;
+		char k = *c;
+		if (k == (int)0) {
+			printf(" [*] Page %lu: \n", num);
+		}
+		else {
+			printf(" [*] Page %lu: %s\n", num, c);
+		}*/
+		printf("MSI in exact\n");
+	}
+	else {
+		printf("Out of page range\n");
+	}
+}
+
 void assign_addr_to_pages(uint64_t addr, int pa)
 {
 	int i = 0;

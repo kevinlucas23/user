@@ -65,9 +65,10 @@ int connect_client(int port, struct mmap_info* k);
 // To keep the connection active
 void delay(int secs);
 
-// To read and write given the commands
+// To read, view and write given the commands
 void to_read();
 void to_write();
+void to_msi();
 void assign_addr_to_pages(uint64_t addr, int pa);
 
 #endif /* end of include guard: __USER_PROJECT3_H_ */

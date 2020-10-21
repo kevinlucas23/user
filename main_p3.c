@@ -48,7 +48,7 @@ int main(int argc, char* argv[])
 	assign_addr_to_pages((uint64_t)k.mmap_addr, num_pages);
 
 	for (;;) {
-		printf("\nWhich command should I run? (r:read, w:write, or x:exit): ");
+		printf("\nWhich command should I run? (r:read, w:write, v:view msi list, or x:exit): ");
 		if (!fgets(user_in, 40, stdin))
 			errExit("fgets error");
 		if (!strncmp(user_in, "r", 1)) {
@@ -59,6 +59,9 @@ int main(int argc, char* argv[])
 		}
 		else if (!strncmp(user_in, "x", 1)) {
 			break;
+		}
+		else if ((!strncmp(user_in, "v", 1)) {
+			to_msi();
 		}
 	}
 
