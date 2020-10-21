@@ -38,7 +38,7 @@ struct msi_info
 {
 	void* mmap_addr;
 	enum MSI_I protocol;
-	pthread_t mutex;
+	pthread_mutex_t mutex;
 };
 
 struct user_args {
