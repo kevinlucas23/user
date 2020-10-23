@@ -202,7 +202,7 @@ void* thread_socket(void* arg) {
 			errExit("Unable to read in socket thread");
 		}
 	}
-	pthread_cleanup_pop(0);
+	//pthread_cleanup_pop(0);
 	return NULL;
 }
 
