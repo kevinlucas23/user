@@ -34,6 +34,13 @@ enum MSI_I {
 	shared
 };
 
+enum MSI_O {
+	page_invalid = 0,
+	page_request,
+	page_reply,
+	end_erything
+};
+
 struct msi_info
 {
 	void* mmap_addr;
@@ -49,6 +56,12 @@ struct user_args {
 struct mmap_info {
 	uint64_t length;
 	void* mmap_addr;
+};
+
+struct check_info
+{
+	struct data_to in_msi;
+	enum MSI_O a_mess;
 };
 
 struct data_to {

@@ -172,9 +172,37 @@ void* fault_handler_thread(void* arg)
 }
 
 void* thread_socket(void* arg) {
-	struct sock_args* socket = arg;
-
-	return (void*)0;
+	struct sock_args* sock = arg;
+	struct check_info kev;
+	if (!sock)
+	{
+		errExit("No arg passed")
+	}
+	while (1) {
+		if (read(sock->soc, &kev, sizeof(kev)) > 0) {
+			if (kev.a_mess == end_erything) {
+				close(sock->soc);
+				break;
+			}
+			if (kev.a_mess == page_request) {
+				// msi_handle_page_request(bus_args->fd, &msg);
+				continue;
+			}
+			if (kev.a_mess == page_invalid) {
+				// msi_handle_page_invalidate(bus_args->fd, &msg);
+				continue;
+			}
+			if (kev.a_mess == page_reply) {
+				// msi_handle_page_reply(bus_args->fd, &msg);
+				continue;
+			}
+		}
+		else {
+			errExit("Unable to read in socket thread");
+		}
+	}
+	pthread_cleanup_pop(0);
+	return NULL;
 }
 
 long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
@@ -232,7 +260,7 @@ int connect_server(int port, struct mmap_info* k)
 	int sockfd, connfd, length, reaa;
 	struct sockaddr_in saddr;
 	char buff[20];
-	struct data_to kev;
+	struct check_info kev;
 	void* map_t;
 
 	sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -271,10 +299,10 @@ int connect_server(int port, struct mmap_info* k)
 		errExit("mmap");
 
 	printf("mmap addr: %p, and length: %d.\n", map_t, length);
-	kev.addr = (uint64_t)map_t;
-	kev.size = length;
-	k->mmap_addr = (void*)kev.addr;
-	k->length = kev.size;
+	kev.in_msi.addr = (uint64_t)map_t;
+	kev.in_msi.size = length;
+	k->mmap_addr = (void*)kev.in_msi.addr;
+	k->length = kev.in_msi.size;
 	reaa = write(connfd, &kev, sizeof(kev));
 	if (reaa < 0)
 		errExit("Can't write");
@@ -286,7 +314,7 @@ int connect_client(int port, struct mmap_info* k)
 {
 	int sockfd, reaa;
 	struct sockaddr_in saddr;
-	struct data_to kev;
+	struct check_info kev;
 	char buff[20];
 
 	sockfd = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
@@ -320,9 +348,9 @@ int connect_client(int port, struct mmap_info* k)
 	if (reaa < 0)
 		errExit("Can't read");
 
-	printf("Request received addr: 0x%lx, and length: %lu.\n", kev.addr, kev.size);
-	k->mmap_addr = (void*)kev.addr;
-	k->length = kev.size;
+	printf("Request received addr: 0x%lx, and length: %lu.\n", kev.in_msi.addr, kev.in_msi.size);
+	k->mmap_addr = (void*)kev.in_msi.addr;
+	k->length = kev.in_msi.size;
 	close(sockfd);
 	return sockfd;
 }
