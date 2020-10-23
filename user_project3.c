@@ -176,7 +176,7 @@ void* thread_socket(void* arg) {
 	struct check_info kev;
 	if (!sock)
 	{
-		errExit("No arg passed")
+		errExit("No arg passed");
 	}
 	while (1) {
 		if (read(sock->soc, &kev, sizeof(kev)) > 0) {

@@ -58,15 +58,15 @@ struct mmap_info {
 	void* mmap_addr;
 };
 
+struct data_to {
+	uint64_t addr;
+	uint64_t size;
+};
+
 struct check_info
 {
 	struct data_to in_msi;
 	enum MSI_O a_mess;
-};
-
-struct data_to {
-	uint64_t addr;
-	uint64_t size;
 };
 
 struct sock_args {
