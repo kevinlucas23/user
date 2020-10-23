@@ -79,7 +79,7 @@ void* fault_handler_thread(void* arg);
 long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr);
 
 // For socket thread
-void* thread_socket_handler(void* arg);
+void thread_socket_handler(void* arg);
 void* thread_socket(void* arg);
 
 // For my pages
