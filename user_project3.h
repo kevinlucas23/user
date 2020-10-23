@@ -85,8 +85,8 @@ void* thread_socket(void* arg);
 void all_pages();
 
 // Connection between server and client.
-int connect_server(int port, struct mmap_info* k);
-int connect_client(int port, struct mmap_info* k);
+int connect_server(int port, struct mmap_info* k, struct sock_args* luc);
+int connect_client(int port, struct mmap_info* k, struct sock_args* luc);
 
 // To keep the connection active
 void delay(int secs);

@@ -256,7 +256,7 @@ void all_pages()
 	}
 }
 
-int connect_server(int port, struct mmap_info* k)
+int connect_server(int port, struct mmap_info* k, struct sock_args* luc)
 {
 	int sockfd, connfd, length, reaa;
 	struct sockaddr_in saddr;
@@ -304,6 +304,9 @@ int connect_server(int port, struct mmap_info* k)
 	kev.in_msi.size = length;
 	k->mmap_addr = (void*)kev.in_msi.addr;
 	k->length = kev.in_msi.size;
+	luc->info.addr = kev.in_msi.addr;
+	luc->info.size = kev.in_msi.size;
+	luc->soc = connfd;
 	reaa = write(connfd, &kev, sizeof(kev));
 	if (reaa < 0)
 		errExit("Can't write");
@@ -311,7 +314,7 @@ int connect_server(int port, struct mmap_info* k)
 	return connfd;
 }
 
-int connect_client(int port, struct mmap_info* k)
+int connect_client(int port, struct mmap_info* k, struct sock_args* luc)
 {
 	int sockfd, reaa;
 	struct sockaddr_in saddr;
@@ -352,6 +355,7 @@ int connect_client(int port, struct mmap_info* k)
 	printf("Request received addr: 0x%lx, and length: %lu.\n", kev.in_msi.addr, kev.in_msi.size);
 	k->mmap_addr = (void*)kev.in_msi.addr;
 	k->length = kev.in_msi.size;
-	close(sockfd);
+	luc->soc = sockfd;
+	// close(sockfd);
 	return sockfd;
 }

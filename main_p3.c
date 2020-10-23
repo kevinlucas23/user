@@ -8,7 +8,8 @@ int main(int argc, char* argv[])
 	int out = 0, data;
 	struct mmap_info k;
 	void* handl;
-	pthread_t thr;
+	pthread_t thr, soc_thr;
+	struct sock_args for_soc;
 	char user_in[40];
 	FILE* fptr;
 
@@ -35,12 +36,18 @@ int main(int argc, char* argv[])
 	printf(" [*] Pairing...\n");
 
 	if (data % 2 == 0) {
-		out = connect_server(atoi(argv[1]), &k);
+		out = connect_server(atoi(argv[1]), &k, &for_soc);
+		if (pthread_create(&soc_thr, NULL, thread_socket, (void*)&for_soc) != 0) {
+			errExit("can thread it");
+		}
 	}
 	if (data % 2 == 1) {
-		out = connect_client(atoi(argv[2]), &k);
+		out = connect_client(atoi(argv[2]), &k, &for_soc);
 		mmap(k.mmap_addr, k.length, PROT_READ | PROT_WRITE,
 			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+		if (pthread_create(&soc_thr, NULL, thread_socket, (void*)&for_soc) != 0) {
+			errExit("can thread it");
+		}
 	}
 
 	all_pages();
