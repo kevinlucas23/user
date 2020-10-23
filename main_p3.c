@@ -66,6 +66,7 @@ int main(int argc, char* argv[])
 			to_write();
 		}
 		else if (!strncmp(user_in, "x", 1)) {
+			pthread_cancel(soc_thr);
 			break;
 		}
 		else if ((!strncmp(user_in, "v", 1))) {
