@@ -171,6 +171,47 @@ void* fault_handler_thread(void* arg)
 	}
 }
 
+
+long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
+{
+	long uffd;          /* userfaultfd file descriptor */
+	struct uffdio_api uffdio_api;
+	struct uffdio_register uffdio_register;
+	int s;
+	struct user_args* kev = (struct user_args*)malloc(sizeof(struct user_args));
+
+	*start_handle = mmap(NULL, k->length, PROT_READ | PROT_WRITE,
+		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if (*start_handle == MAP_FAILED)
+		errExit("mmap");
+	memset(*start_handle, 0, k->length);
+
+	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
+	kev->u_addr = (uint64_t)*start_handle;
+	kev->uffd = uffd;
+	if (uffd == -1) {
+		errExit("userfaultfd");
+	}
+
+	uffdio_api.api = UFFD_API;
+	uffdio_api.features = 0;
+	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1)
+		errExit("ioctl-UFFDIO_API");
+
+	uffdio_register.range.start = (unsigned long)k->mmap_addr;
+	uffdio_register.range.len = k->length;
+	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
+	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
+		errExit("ioctl-UFFDIO_REGISTER");
+
+	s = pthread_create(thr, NULL, fault_handler_thread, (void*)kev);
+	if (s != 0) {
+		errno = s;
+		errExit("pthread_create");
+	}
+	return uffd;
+}
+
 void* thread_socket_handler(void* arg) {
 	int sk = *(int*)arg;
 	/* Ensure it's not stdin/out/err */
@@ -215,46 +256,6 @@ void* thread_socket(void* arg) {
 	}
 	//pthread_cleanup_pop(0);
 	return NULL;
-}
-
-long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
-{
-	long uffd;          /* userfaultfd file descriptor */
-	struct uffdio_api uffdio_api;
-	struct uffdio_register uffdio_register;
-	int s;
-	struct user_args* kev = (struct user_args*)malloc(sizeof(struct user_args));
-
-	*start_handle = mmap(NULL, k->length, PROT_READ | PROT_WRITE,
-		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if (*start_handle == MAP_FAILED)
-		errExit("mmap");
-	memset(*start_handle, 0, k->length);
-
-	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-	kev->u_addr = (uint64_t)*start_handle;
-	kev->uffd = uffd;
-	if (uffd == -1) {
-		errExit("userfaultfd");
-	}	
-
-	uffdio_api.api = UFFD_API;
-	uffdio_api.features = 0;
-	if (ioctl(uffd, UFFDIO_API, &uffdio_api) == -1)
-		errExit("ioctl-UFFDIO_API");
-
-	uffdio_register.range.start = (unsigned long)k->mmap_addr;
-	uffdio_register.range.len = k->length;
-	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register) == -1)
-		errExit("ioctl-UFFDIO_REGISTER");
-
-	s = pthread_create(thr, NULL, fault_handler_thread, (void*)kev);
-	if (s != 0) {
-		errno = s;
-		errExit("pthread_create");
-	}
-	return uffd;
 }
 
 void all_pages()
