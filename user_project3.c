@@ -212,14 +212,13 @@ long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 	return uffd;
 }
 
-void thread_socket_handler(void* arg) {
-	int sk = *(int*)arg;
-	/* Ensure it's not stdin/out/err */
-	printf("Cleanup handler called: %d\n", sk);
-	if (sk >= 2)
-		close(sk);
-	return;
-}
+//void thread_socket_handler(void* arg) {
+//	int sk = *(int*)arg;
+//	/* Ensure it's not stdin/out/err */
+//	printf("Cleanup handler called: %d\n", sk);
+//	if (sk >= 2)
+//		close(sk);
+//}
 
 
 void* thread_socket(void* arg) {
@@ -229,7 +228,7 @@ void* thread_socket(void* arg) {
 	{
 		errExit("No arg passed");
 	}
-	pthread_cleanup_push(thread_socket_handler, &sock->soc);
+	//pthread_cleanup_push(thread_socket_handler, &sock->soc);
 	while (1) {
 		if (read(sock->soc, &kev, sizeof(kev)) > 0) 
 		{

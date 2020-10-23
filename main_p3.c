@@ -12,6 +12,7 @@ int main(int argc, char* argv[])
 	struct sock_args for_soc;
 	char user_in[40];
 	FILE* fptr;
+	struct check_info kev;
 
 	if (argc != 3) {
 		fprintf(stderr, "Usage: %s port remote_port\n", argv[0]);
@@ -67,6 +68,10 @@ int main(int argc, char* argv[])
 		}
 		else if (!strncmp(user_in, "x", 1)) {
 			pthread_cancel(soc_thr);
+			kev.a_mess = end_erything;
+			if (write(out, &kev, sizeof(kev))) {
+				errExit("Error exiting the thread");
+			}
 			break;
 		}
 		else if ((!strncmp(user_in, "v", 1))) {
