@@ -177,6 +177,7 @@ void* thread_socket_handler(void* arg) {
 	printf("Cleanup handler called: %d\n", sk);
 	if (sk >= 2)
 		close(sk);
+	return;
 }
 
 
@@ -187,7 +188,7 @@ void* thread_socket(void* arg) {
 	{
 		errExit("No arg passed");
 	}
-	//pthread_cleanup_push(thread_socket_handler, &sock->soc);
+	pthread_cleanup_push(thread_socket_handler, &sock->soc);
 	while (1) {
 		if (read(sock->soc, &kev, sizeof(kev)) > 0) 
 		{
