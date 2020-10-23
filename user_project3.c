@@ -356,6 +356,6 @@ int connect_client(int port, struct mmap_info* k, struct sock_args* luc)
 	k->mmap_addr = (void*)kev.in_msi.addr;
 	k->length = kev.in_msi.size;
 	luc->soc = sockfd;
-	// close(sockfd);
+	close(sockfd);
 	return sockfd;
 }
