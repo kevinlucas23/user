@@ -179,7 +179,8 @@ void* thread_socket(void* arg) {
 		errExit("No arg passed");
 	}
 	while (1) {
-		if (read(sock->soc, &kev, sizeof(kev)) > 0) {
+		if (read(sock->soc, &kev, sizeof(kev)) > 0) 
+		{
 			if (kev.a_mess == end_erything) {
 				close(sock->soc);
 				break;
@@ -201,7 +202,7 @@ void* thread_socket(void* arg) {
 			errExit("Unable to read in socket thread");
 		}
 	}
-	pthread_cleanup_pop(0);
+	//pthread_cleanup_pop(0);
 	return NULL;
 }
 
