@@ -178,7 +178,7 @@ void* thread_socket(void* arg) {
 	{
 		errExit("No arg passed");
 	}
-	while (1) {
+	for (;;) {
 		if (read(sock->soc, &kev, sizeof(kev)) > 0) 
 		{
 			if (kev.a_mess == end_erything) {
