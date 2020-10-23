@@ -171,6 +171,15 @@ void* fault_handler_thread(void* arg)
 	}
 }
 
+void* thread_socket_handler(void* arg) {
+	int sk = *(int*)arg;
+	/* Ensure it's not stdin/out/err */
+	printf("Cleanup handler called: %d\n", sk);
+	if (sk >= 2)
+		close(sk);
+}
+
+
 void* thread_socket(void* arg) {
 	struct sock_args* sock = arg;
 	struct check_info kev;
@@ -178,7 +187,8 @@ void* thread_socket(void* arg) {
 	{
 		errExit("No arg passed");
 	}
-	for (;;) {
+	pthread_cleanup_push(thread_socket_handler, &sock->soc);
+	while (1) {
 		if (read(sock->soc, &kev, sizeof(kev)) > 0) 
 		{
 			if (kev.a_mess == end_erything) {
@@ -202,7 +212,7 @@ void* thread_socket(void* arg) {
 			errExit("Unable to read in socket thread");
 		}
 	}
-	pthread_cleanup_pop(0);
+	//pthread_cleanup_pop(0);
 	return NULL;
 }
 
