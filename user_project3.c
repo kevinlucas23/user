@@ -229,11 +229,12 @@ void* thread_socket(void* arg) {
 		errExit("No arg passed");
 	}
 	pthread_cleanup_push(thread_socket_handler, &sock->soc);
-	printf("socket : %i", sock->soc);
 	while (1) {
 		if (read(sock->soc, &kev, sizeof(kev)) > 0) 
 		{
 			if (kev.a_mess == end_erything) {
+				printf("socket close : %i", sock->soc);
+
 				close(sock->soc);
 				break;
 			}
