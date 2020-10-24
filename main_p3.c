@@ -5,7 +5,7 @@ extern unsigned long num_pages;
 
 int main(int argc, char* argv[])
 {
-	int out,jk = 0, data;
+	int out = 0,jk = 0, data;
 	struct mmap_info k;
 	void* handl;
 	pthread_t thr, soc_thr;
