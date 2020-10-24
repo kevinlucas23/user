@@ -420,7 +420,7 @@ void request_a_page(int k, struct check_info* kev)
 	return;
 }
 
-void invalidate_a_page(int k, check_info* kev)
+void invalidate_a_page(int k, struct check_info* kev)
 {
 	struct check_info mess;
 
