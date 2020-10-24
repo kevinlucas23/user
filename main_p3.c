@@ -41,14 +41,16 @@ int main(int argc, char* argv[])
 		if (pthread_create(&soc_thr, NULL, thread_socket, (void*)&for_soc) != 0) {
 			errExit("can thread it");
 		}
+		printf("out for server: %i", out);
 	}
 	if (data % 2 == 1) {
 		out = connect_client(atoi(argv[2]), &k, &for_soc);
 		mmap(k.mmap_addr, k.length, PROT_READ | PROT_WRITE,
-			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+			MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
 		if (pthread_create(&soc_thr, NULL, thread_socket, (void*)&for_soc) != 0) {
 			errExit("can thread it");
 		}
+		printf("out for client: %i", out);
 	}
 
 	all_pages();
