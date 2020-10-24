@@ -52,10 +52,11 @@ void to_read()
 	}
 }
 
-void to_write()
+void to_write(int k)
 {
 	char user_i[4] = { 0 }, user_o[40] = { 0 };
 	unsigned long num, i = 0;
+	struct check_info mess;
 
 	printf("For which page do you like to write to? (0-%d, or -1 for all): ", ((int)num_pages - 1));
 	if (!fgets(user_i, 4, stdin))
@@ -69,11 +70,23 @@ void to_write()
 	if ((int)num == -1) {
 		while (i < num_pages) {
 			memcpy(all_page[(int)i].mmap_addr, user_o, strlen(user_o));
+			all_page[(int)i].protocol = modified;
+			mess.a_mess = page_invalid;
+			mess.in_msi.addr = (uint64_t)all_page[(int)i].mmap_addr;
+			if (write(k, &mess, sizeof(mess)) < 0) {
+				errExit("Bad write in to_write function");
+			}
 			i++;
 		}
 	}
 	else if (num < num_pages) {
 		memcpy(all_page[(int)num].mmap_addr, user_o, strlen(user_o));
+		all_page[(int)i].protocol = modified;
+		mess.a_mess = page_invalid;
+		mess.in_msi.addr = (uint64_t)all_page[(int)num].mmap_addr;
+		if (write(k, &mess, sizeof(mess)) < 0) {
+			errExit("Bad write in to_write function");
+		}
 	}
 	else {
 		printf("Out of page range\n");
@@ -83,23 +96,27 @@ void to_write()
 void to_msi() {
 	char user_in[20];
 	unsigned long num, i = 0;
+	struct check_info mess;
 	char* c;
 	printf("For which page would you view the status of? (0-%d, or -1 for all): ", ((int)num_pages - 1));
 	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
 	num = strtoul(user_in, NULL, 0);
-
+	char* all_strings[4] = { "INVALID", "MODIFIED", "SHARED" };
 	if ((int)num == -1) {
 		for (i = 0; i < num_pages; ++i) {
 			/*c = (char*)all_page[(int)i].mmap_addr;
-			char k = *c;
+			char k = *c;*/
+			/*all_page[(int)i].protocol = modified;
+			mess.a_mess = page_invalid;
+			mess.in_msi.addr = (uint64_t)all_page[(int)i].mmap_addr;
 			if (k == (int)0) {
 				printf(" [*] Page %lu: \n", i);
 			}
 			else {
 				printf(" [*] Page %lu: %s\n", i, c);
 			}*/
-			printf("MSI in all\n");
+			printf(" [*]Page %lu: %s \n", i, all_strings[all_page[(int)i].protocol]);
 		}
 	}
 	else if (num < num_pages) {
@@ -111,7 +128,7 @@ void to_msi() {
 		else {
 			printf(" [*] Page %lu: %s\n", num, c);
 		}*/
-		printf("MSI in exact\n");
+		printf(" [*]Page %lu: %s \n", i, all_strings[all_page[(int)num].protocol]);
 	}
 	else {
 		printf("Out of page range\n");
@@ -272,14 +289,20 @@ void* thread_socket(void* arg) {
 			}
 			if (kev.a_mess == page_request) {
 				// msi_handle_page_request(bus_args->fd, &msg);
+				request_a_page(sock->soc, &kev);
 				continue;
 			}
 			if (kev.a_mess == page_invalid) {
 				// msi_handle_page_invalidate(bus_args->fd, &msg);
+				invalidate_a_page(sock->soc, &kev);
 				continue;
 			}
 			if (kev.a_mess == page_reply) {
 				// msi_handle_page_reply(bus_args->fd, &msg);
+				reply_to_page(sock->soc, &kev);
+				continue;
+			}
+			if (kev.a_mess == left) {
 				continue;
 			}
 		}

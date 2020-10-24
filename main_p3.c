@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 			to_read();
 		}
 		else if (!strncmp(user_in, "w", 1)) {
-			to_write();
+			to_write(out);
 		}
 		else if (!strncmp(user_in, "x", 1)) {
 			pthread_cancel(soc_thr);

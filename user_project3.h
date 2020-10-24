@@ -99,7 +99,7 @@ void delay(int secs);
 
 // To read, view and write given the commands
 void to_read();
-void to_write();
+void to_write(int k);
 void to_msi();
 void assign_addr_to_pages(uint64_t addr, int pa);
 
