@@ -67,6 +67,7 @@ struct check_info
 {
 	struct data_to in_msi;
 	enum MSI_O a_mess;
+	char inside[4096];
 };
 
 struct sock_args {
@@ -99,5 +100,6 @@ void to_msi();
 void assign_addr_to_pages(uint64_t addr, int pa);
 
 struct msi_info* getpage(void* addresses);
+void request_a_page(int k, struct check_info* kev);
 
 #endif /* end of include guard: __USER_PROJECT3_H_ */

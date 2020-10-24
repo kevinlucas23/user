@@ -289,40 +289,40 @@ int connect_server(int port, struct mmap_info* k, struct sock_args* luc)
 		errExit("Socket server bind failed...\n");
 	}
 
-	if ((listen(sockfd, 12)) != 0) {
-		errExit("Socket server listen failed...\n");
-	}
+if ((listen(sockfd, 12)) != 0) {
+	errExit("Socket server listen failed...\n");
+}
 
-	connfd = accept(sockfd, NULL, NULL);
-	if (connfd < 0) {
-		errExit("Socket server accept failed..\n");
-	}
+connfd = accept(sockfd, NULL, NULL);
+if (connfd < 0) {
+	errExit("Socket server accept failed..\n");
+}
 
-	printf(" [*] Paired!\n");
+printf(" [*] Paired!\n");
 
-	reaa = read(connfd, &buff, sizeof(buff));
-	if (reaa < 0)
-		errExit("Can't read");
-	num_pages = strtoul(buff, NULL, 0);
-	length = strtoul(buff, NULL, 0) * sysconf(_SC_PAGE_SIZE);
-	map_t = mmap(NULL, length, PROT_READ | PROT_WRITE,
-		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-	if (map_t == MAP_FAILED)
-		errExit("mmap");
+reaa = read(connfd, &buff, sizeof(buff));
+if (reaa < 0)
+	errExit("Can't read");
+num_pages = strtoul(buff, NULL, 0);
+length = strtoul(buff, NULL, 0) * sysconf(_SC_PAGE_SIZE);
+map_t = mmap(NULL, length, PROT_READ | PROT_WRITE,
+	MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+if (map_t == MAP_FAILED)
+errExit("mmap");
 
-	printf("mmap addr: %p, and length: %d.\n", map_t, length);
-	kev.in_msi.addr = (uint64_t)map_t;
-	kev.in_msi.size = length;
-	k->mmap_addr = (void*)kev.in_msi.addr;
-	k->length = kev.in_msi.size;
-	luc->info.addr = kev.in_msi.addr;
-	luc->info.size = kev.in_msi.size;
-	luc->soc = connfd;
-	reaa = write(connfd, &kev, sizeof(kev));
-	if (reaa < 0)
-		errExit("Can't write");
-	close(sockfd);
-	return connfd;
+printf("mmap addr: %p, and length: %d.\n", map_t, length);
+kev.in_msi.addr = (uint64_t)map_t;
+kev.in_msi.size = length;
+k->mmap_addr = (void*)kev.in_msi.addr;
+k->length = kev.in_msi.size;
+luc->info.addr = kev.in_msi.addr;
+luc->info.size = kev.in_msi.size;
+luc->soc = connfd;
+reaa = write(connfd, &kev, sizeof(kev));
+if (reaa < 0)
+	errExit("Can't write");
+close(sockfd);
+return connfd;
 }
 
 int connect_client(int port, struct mmap_info* k, struct sock_args* luc)
@@ -382,4 +382,31 @@ struct msi_info* getpage(void* addresses)
 		}
 	}
 	return page;
+}
+
+void request_a_page(int k, struct check_info* kev)
+{
+	struct check_info mess;
+
+	struct msi_info* next_page = getpage((void*)kev->in_msi.addr);
+	if(!next_page){
+		errExit("Page doesn't exit\n");
+	}
+	mess.a_mess = page_reply;
+	if (next_page->protocol == invalidate) {
+		memset(mess.inside, 0, sysconf(_SC_PAGE_SIZE));
+	}
+	else {
+		memcpy(mess.inside, next_page->mmap_addr, sysconf(_SC_PAGE_SIZE));
+	}
+	pthread_mutex_lock(&next_page->mutex);
+	if (write(k, &mess, sizeof(mess)) < 0) {
+		pthread_mutex_unlock(&next_page->mutex);
+		errExit("handle_page_request_error");
+	}
+	else {
+		next_page->protocol = shared;
+		pthread_mutex_unlock(&next_page->mutex);
+	}
+	return;
 }
