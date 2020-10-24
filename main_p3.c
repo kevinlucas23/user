@@ -72,7 +72,10 @@ int main(int argc, char* argv[])
 			pthread_cancel(soc_thr);
 			printf("int here\n");
 			kev.a_mess = end_erything;
-			write(out, &kev, sizeof(kev));
+			if (write(out, &kev, sizeof(kev)) <= 0) {
+				printf("closing socket: %i", out);
+				errExit("Error exiting the thread");
+			}
 			printf("int here\n");
 			break;
 		}

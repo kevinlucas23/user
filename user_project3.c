@@ -236,7 +236,7 @@ void* thread_socket(void* arg) {
 				printf("socket close : %i", sock->soc);
 
 				close(sock->soc);
-				break;
+				return NULL;
 			}
 			if (kev.a_mess == page_request) {
 				// msi_handle_page_request(bus_args->fd, &msg);
