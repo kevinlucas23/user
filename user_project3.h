@@ -98,4 +98,6 @@ void to_write();
 void to_msi();
 void assign_addr_to_pages(uint64_t addr, int pa);
 
+struct msi_info* getpage(void* addresses);
+
 #endif /* end of include guard: __USER_PROJECT3_H_ */

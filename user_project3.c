@@ -2,6 +2,7 @@
 
 unsigned long num_pages; // Stores the number of pages given from the user.
 extern struct msi_info all_page[];
+pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
 
 void delay(int secs)
 {
@@ -215,7 +216,6 @@ long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 void thread_socket_handler(void* arg) {
 	int sk = *(int*)arg;
 	/* Ensure it's not stdin/out/err */
-	printf("Cleanup handler called: %d\n", sk);
 	if (sk >= 2)
 		close(sk);
 }
@@ -233,8 +233,6 @@ void* thread_socket(void* arg) {
 		if (read(sock->soc, &kev, sizeof(kev)) > 0) 
 		{
 			if (kev.a_mess == end_erything) {
-				printf("socket close : %i", sock->soc);
-
 				close(sock->soc);
 				return NULL;
 			}
@@ -371,4 +369,17 @@ int connect_client(int port, struct mmap_info* k, struct sock_args* luc)
 	luc->soc = sockfd;
 	// close(sockfd);
 	return sockfd;
+}
+
+struct msi_info* getpage(void* addresses)
+{
+	struct msi_info* page = NULL;
+	int i = 0;
+	for (i = 0; i < (int)num_pages; ++i) {
+		if ((uint64_t)all_page[i].mmap_addr + sysconf(_SC_PAGE_SIZE) > (uint64_t)addresses) {
+			page = &all_page[i];
+			break;
+		}
+	}
+	return page;
 }

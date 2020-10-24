@@ -41,7 +41,6 @@ int main(int argc, char* argv[])
 		if (pthread_create(&soc_thr, NULL, thread_socket, (void*)&for_soc) != 0) {
 			errExit("can thread it");
 		}
-		printf("out for server: %i", out);
 	}
 	if (data % 2 == 1) {
 		out = connect_client(atoi(argv[2]), &k, &for_soc);
@@ -50,7 +49,6 @@ int main(int argc, char* argv[])
 		if (pthread_create(&soc_thr, NULL, thread_socket, (void*)&for_soc) != 0) {
 			errExit("can thread it");
 		}
-		printf("out for client: %i", out);
 	}
 
 	all_pages();
@@ -70,10 +68,8 @@ int main(int argc, char* argv[])
 		}
 		else if (!strncmp(user_in, "x", 1)) {
 			pthread_cancel(soc_thr);
-			printf("int here\n");
 			kev.a_mess = end_erything;
 			jk = write(out, &kev, sizeof(kev));
-			printf("int here\n");
 			break;
 		}
 		else if ((!strncmp(user_in, "v", 1))) {
