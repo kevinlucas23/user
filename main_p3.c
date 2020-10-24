@@ -70,11 +70,13 @@ int main(int argc, char* argv[])
 		}
 		else if (!strncmp(user_in, "x", 1)) {
 			pthread_cancel(soc_thr);
+			printf("int here\n");
 			kev.a_mess = end_erything;
 			if (write(out, &kev, sizeof(kev)) <= 0) {
 				printf("closing socket: %i", out);
 				errExit("Error exiting the thread");
 			}
+			printf("int here\n");
 			break;
 		}
 		else if ((!strncmp(user_in, "v", 1))) {
