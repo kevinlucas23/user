@@ -96,7 +96,6 @@ void to_write(int k)
 void to_msi() {
 	char user_in[20];
 	unsigned long num, i = 0;
-	char* c;
 	printf("For which page would you view the status of? (0-%d, or -1 for all): ", ((int)num_pages - 1));
 	if (!fgets(user_in, 20, stdin))
 		errExit("fgets error");
