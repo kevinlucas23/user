@@ -323,7 +323,7 @@ int connect_server(int port, struct mmap_info* k, struct sock_args* luc)
 	reaa = write(connfd, &kev, sizeof(kev));
 	if (reaa < 0)
 		errExit("Can't write");
-	// close(sockfd);
+	close(sockfd);
 	return connfd;
 }
 
