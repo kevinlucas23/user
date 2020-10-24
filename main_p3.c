@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 	}
 
 	all_pages();
-
+	k.kc = out;
 	fault_region(&k, &handl, &thr);
 	assign_addr_to_pages((uint64_t)k.mmap_addr, num_pages);
 

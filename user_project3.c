@@ -162,6 +162,8 @@ void* fault_handler_thread(void* arg)
 			exit(EXIT_FAILURE);
 		}
 
+		page_fautl(kev->ki, page, (void*)msg.arg.pagefault.address, msg.arg.pagefault.flags);
+
 		uffdio_copy.src = (unsigned long)page;
 		uffdio_copy.dst = (unsigned long)msg.arg.pagefault.address &
 			~(sysconf(_SC_PAGE_SIZE) - 1);
@@ -189,7 +191,7 @@ long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 	if (*start_handle == MAP_FAILED)
 		errExit("mmap");
 	memset(*start_handle, 0, k->length);
-
+	kev->ki = k->kc;
 	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
 	kev->u_addr = (uint64_t)*start_handle;
 	kev->uffd = uffd;
@@ -219,6 +221,29 @@ long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 void page_fautl(int k, char* page, void* fault_addr, unsigned int rw)
 {
 	struct check_info mess;
+	pthread_mutex_lock(&socket_m);
+	struct msi_info* next_page = getpage((void*)fault_addr);
+	if (!next_page) {
+		errExit("Page doesn't exit\n");
+	}
+	pthread_mutex_lock(&next_page->mutex);
+	mess.a_mess = page_request;
+	mess.in_msi.addr = (uint64_t)fault_addr;
+	mess.in_msi.size = sysconf(_SC_PAGE_SIZE);
+	if (write(k, &mess, sizeof(mess)) < 0) {
+		pthread_mutex_unlock(&next_page->mutex);
+		errExit("request_page_failed");
+	}
+	memset(&all_data, 0, 4096);
+	count = 1;
+	while (count == 1) {
+		pthread_cond_wait(&cond, &socket_m);
+	}
+	memcpy(page, &all_data, sysconf(_SC_PAGE_SIZE));
+	next_page->protocol = shared;
+	pthread_mutex_unlock(&socket_m);
+	pthread_mutex_unlock(&next_page->mutex);
+	return;
 
 }
 
@@ -298,40 +323,40 @@ int connect_server(int port, struct mmap_info* k, struct sock_args* luc)
 		errExit("Socket server bind failed...\n");
 	}
 
-if ((listen(sockfd, 12)) != 0) {
-	errExit("Socket server listen failed...\n");
-}
+	if ((listen(sockfd, 12)) != 0) {
+		errExit("Socket server listen failed...\n");
+	}
 
-connfd = accept(sockfd, NULL, NULL);
-if (connfd < 0) {
-	errExit("Socket server accept failed..\n");
-}
+	connfd = accept(sockfd, NULL, NULL);
+	if (connfd < 0) {
+		errExit("Socket server accept failed..\n");
+	}
 
-printf(" [*] Paired!\n");
+	printf(" [*] Paired!\n");
 
-reaa = read(connfd, &buff, sizeof(buff));
-if (reaa < 0)
-	errExit("Can't read");
-num_pages = strtoul(buff, NULL, 0);
-length = strtoul(buff, NULL, 0) * sysconf(_SC_PAGE_SIZE);
-map_t = mmap(NULL, length, PROT_READ | PROT_WRITE,
-	MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-if (map_t == MAP_FAILED)
-errExit("mmap");
+	reaa = read(connfd, &buff, sizeof(buff));
+	if (reaa < 0)
+		errExit("Can't read");
+	num_pages = strtoul(buff, NULL, 0);
+	length = strtoul(buff, NULL, 0) * sysconf(_SC_PAGE_SIZE);
+	map_t = mmap(NULL, length, PROT_READ | PROT_WRITE,
+		MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+	if (map_t == MAP_FAILED)
+	errExit("mmap");
 
-printf("mmap addr: %p, and length: %d.\n", map_t, length);
-kev.in_msi.addr = (uint64_t)map_t;
-kev.in_msi.size = length;
-k->mmap_addr = (void*)kev.in_msi.addr;
-k->length = kev.in_msi.size;
-luc->info.addr = kev.in_msi.addr;
-luc->info.size = kev.in_msi.size;
-luc->soc = connfd;
-reaa = write(connfd, &kev, sizeof(kev));
-if (reaa < 0)
-	errExit("Can't write");
-close(sockfd);
-return connfd;
+	printf("mmap addr: %p, and length: %d.\n", map_t, length);
+	kev.in_msi.addr = (uint64_t)map_t;
+	kev.in_msi.size = length;
+	k->mmap_addr = (void*)kev.in_msi.addr;
+	k->length = kev.in_msi.size;
+	luc->info.addr = kev.in_msi.addr;
+	luc->info.size = kev.in_msi.size;
+	luc->soc = connfd;
+	reaa = write(connfd, &kev, sizeof(kev));
+	if (reaa < 0)
+		errExit("Can't write");
+	close(sockfd);
+	return connfd;
 }
 
 int connect_client(int port, struct mmap_info* k, struct sock_args* luc)

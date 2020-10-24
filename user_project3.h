@@ -52,11 +52,13 @@ struct msi_info
 struct user_args {
 	long uffd;
 	uint64_t u_addr;
+	int ki;
 };
 
 struct mmap_info {
 	uint64_t length;
 	void* mmap_addr;
+	int kc;
 };
 
 struct data_to {
