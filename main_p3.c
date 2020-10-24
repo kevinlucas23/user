@@ -5,7 +5,7 @@ extern unsigned long num_pages;
 
 int main(int argc, char* argv[])
 {
-	int out = 0, data;
+	int out,jk = 0, data;
 	struct mmap_info k;
 	void* handl;
 	pthread_t thr, soc_thr;
@@ -23,15 +23,15 @@ int main(int argc, char* argv[])
 		errExit("Error! opening file");
 		// Program exits if the file pointer returns NULL.
 	}
-	out = fscanf(fptr, "%d", &data);
+	jk = fscanf(fptr, "%d", &data);
 	fclose(fptr);
 
 	if ((fptr = fopen("data.txt", "w")) == NULL) {
 		errExit("Error! opening file");
 		// Program exits if the file pointer returns NULL.
 	}
-	out = data + 1;
-	fprintf(fptr, "%d", out);
+	jk = data + 1;
+	fprintf(fptr, "%d", jk);
 	fclose(fptr);
 
 	printf(" [*] Pairing...\n");
