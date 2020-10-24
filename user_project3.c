@@ -218,6 +218,7 @@ void* thread_socket_handler(void* arg) {
 	printf("Cleanup handler called: %d\n", sk);
 	if (sk >= 2)
 		close(sk);
+	return NULL;
 }
 
 
