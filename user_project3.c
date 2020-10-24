@@ -96,7 +96,6 @@ void to_write(int k)
 void to_msi() {
 	char user_in[20];
 	unsigned long num, i = 0;
-	struct check_info mess;
 	char* c;
 	printf("For which page would you view the status of? (0-%d, or -1 for all): ", ((int)num_pages - 1));
 	if (!fgets(user_in, 20, stdin))
@@ -105,30 +104,11 @@ void to_msi() {
 	char* all_strings[4] = { "INVALID", "MODIFIED", "SHARED" };
 	if ((int)num == -1) {
 		for (i = 0; i < num_pages; ++i) {
-			/*c = (char*)all_page[(int)i].mmap_addr;
-			char k = *c;*/
-			/*all_page[(int)i].protocol = modified;
-			mess.a_mess = page_invalid;
-			mess.in_msi.addr = (uint64_t)all_page[(int)i].mmap_addr;
-			if (k == (int)0) {
-				printf(" [*] Page %lu: \n", i);
-			}
-			else {
-				printf(" [*] Page %lu: %s\n", i, c);
-			}*/
-			printf(" [*]Page %lu: %s \n", i, all_strings[all_page[(int)i].protocol]);
+			printf(" [*] Page %lu: %s \n", i, all_strings[all_page[(int)i].protocol]);
 		}
 	}
 	else if (num < num_pages) {
-		/*c = (char*)all_page[(int)num].mmap_addr;
-		char k = *c;
-		if (k == (int)0) {
-			printf(" [*] Page %lu: \n", num);
-		}
-		else {
-			printf(" [*] Page %lu: %s\n", num, c);
-		}*/
-		printf(" [*]Page %lu: %s \n", i, all_strings[all_page[(int)num].protocol]);
+		printf(" [*] Page %lu: %s \n", i, all_strings[all_page[(int)num].protocol]);
 	}
 	else {
 		printf("Out of page range\n");
@@ -266,7 +246,6 @@ void page_fautl(int k, char* page, void* fault_addr, unsigned int rw)
 
 void thread_socket_handler(void* arg) {
 	int sk = *(int*)arg;
-	/* Ensure it's not stdin/out/err */
 	if (sk >= 2)
 		close(sk);
 }
@@ -288,17 +267,14 @@ void* thread_socket(void* arg) {
 				return NULL;
 			}
 			if (kev.a_mess == page_request) {
-				// msi_handle_page_request(bus_args->fd, &msg);
 				request_a_page(sock->soc, &kev);
 				continue;
 			}
 			if (kev.a_mess == page_invalid) {
-				// msi_handle_page_invalidate(bus_args->fd, &msg);
 				invalidate_a_page(sock->soc, &kev);
 				continue;
 			}
 			if (kev.a_mess == page_reply) {
-				// msi_handle_page_reply(bus_args->fd, &msg);
 				reply_to_page(sock->soc, &kev);
 				continue;
 			}
@@ -424,7 +400,6 @@ int connect_client(int port, struct mmap_info* k, struct sock_args* luc)
 	k->mmap_addr = (void*)kev.in_msi.addr;
 	k->length = kev.in_msi.size;
 	luc->soc = sockfd;
-	// close(sockfd);
 	return sockfd;
 }
 
