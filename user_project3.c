@@ -81,7 +81,7 @@ void to_write(int k)
 	}
 	else if (num < num_pages) {
 		memcpy(all_page[(int)num].mmap_addr, user_o, strlen(user_o));
-		all_page[(int)i].protocol = modified;
+		all_page[(int)num].protocol = modified;
 		mess.a_mess = page_invalid;
 		mess.in_msi.addr = (uint64_t)all_page[(int)num].mmap_addr;
 		if (write(k, &mess, sizeof(mess)) < 0) {
