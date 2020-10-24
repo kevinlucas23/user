@@ -69,7 +69,7 @@ int main(int argc, char* argv[])
 		else if (!strncmp(user_in, "x", 1)) {
 			pthread_cancel(soc_thr);
 			kev.a_mess = end_erything;
-			if (write(out, &kev, sizeof(kev))) {
+			if (write(out, &kev, sizeof(kev)) <= 0) {
 				errExit("Error exiting the thread");
 			}
 			break;
