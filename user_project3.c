@@ -3,6 +3,9 @@
 unsigned long num_pages; // Stores the number of pages given from the user.
 extern struct msi_info all_page[];
 pthread_cond_t cond = PTHREAD_COND_INITIALIZER;
+pthread_mutex_t socket_m = PTHREAD_MUTEX_INITIALIZER;
+char all_data[4096];
+int count = 0;
 
 void delay(int secs)
 {
@@ -213,6 +216,12 @@ long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr)
 	return uffd;
 }
 
+void page_fautl(int k, char* page, void* fault_addr, unsigned int rw)
+{
+	struct check_info mess;
+
+}
+
 void thread_socket_handler(void* arg) {
 	int sk = *(int*)arg;
 	/* Ensure it's not stdin/out/err */
@@ -409,4 +418,33 @@ void request_a_page(int k, struct check_info* kev)
 		pthread_mutex_unlock(&next_page->mutex);
 	}
 	return;
+}
+
+void invalidate_a_page(int k, check_info* kev)
+{
+	struct check_info mess;
+
+	struct msi_info* next_page = getpage((void*)kev->in_msi.addr);
+	if (!next_page) {
+		errExit("Page doesn't exit\n");
+	}
+	pthread_mutex_lock(&next_page->mutex);
+	next_page->protocol = invalidate;
+	if (madvise(next_page->mmap_addr, sysconf(_SC_PAGE_SIZE), MADV_DONTNEED)) {
+		errExit("fail to madvise");
+	}
+	mess.a_mess = left;
+	if (write(k, &mess, sizeof(mess)) < 0) {
+		errExit("page_invalidate_failed");
+	}
+	pthread_mutex_unlock(&next_page->mutex);
+}
+
+void reply_to_page(int k, struct check_info* kev)
+{
+	pthread_mutex_lock(&socket_m);
+	memcpy(&all_data, kev->inside, sysconf(_SC_PAGE_SIZE));
+	count = 0;
+	pthread_cond_signal(&cond);
+	pthread_mutex_unlock(&socket_m);
 }

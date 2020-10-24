@@ -38,7 +38,8 @@ enum MSI_O {
 	page_invalid = 0,
 	page_request,
 	page_reply,
-	end_erything
+	end_erything,
+	left
 };
 
 struct msi_info
@@ -78,6 +79,7 @@ struct sock_args {
 // For faulting
 void* fault_handler_thread(void* arg);
 long fault_region(struct mmap_info* k, void** start_handle, pthread_t* thr);
+void page_fautl(int k, char* page, void* fault_addr, unsigned int rw);
 
 // For socket thread
 void thread_socket_handler(void* arg);
@@ -101,5 +103,6 @@ void assign_addr_to_pages(uint64_t addr, int pa);
 
 struct msi_info* getpage(void* addresses);
 void request_a_page(int k, struct check_info* kev);
-
+void invalidate_a_page(int k, struct check_info* kev);
+void reply_to_page(int k, struct check_info* kev);
 #endif /* end of include guard: __USER_PROJECT3_H_ */
